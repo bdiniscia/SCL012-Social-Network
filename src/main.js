@@ -1,5 +1,6 @@
 // Este es el punto de entrada de tu aplicacion
 import { myFunction, closeSession, signInUser, singUpNewUser } from './lib/index.js';
+let database = firebase.firestore();
 
 myFunction();
 
@@ -148,21 +149,25 @@ function createPost(){
   contentPost.appendChild(input);
   // creamos botton de envio de post
   const saveButton = document.createElement('button');
-  saveButton.innerHTML = 'Enviar Post'
+  saveButton.innerHTML = 'Save Post'
   saveButton.addEventListener('click', () => {
-    save();
+    savePost();
+  })
+  const loadButton = document.createElement('button');
+  loadButton.innerHTML = 'Load Post'
+  loadButton.addEventListener('click', () =>{
+    sendPost();
   })
   contentPost.appendChild(saveButton);
+  contentPost.appendChild(loadButton);
 }
-
-
 
 // //  const docRef = firestore.collection("post").doc("postUser");
 // //  const outputHeader = document.querySelector('postOutPut');
 // //  const inputTexField = document.querySelector('post');
 // //  const saveButton = document.querySelector('saveButtond');
 
-const save = () => {
+const savePost = () => {
   //const texToSave = inputTexField.value;
   //console.log("I am going to save" + texToSave + " to Firestore");
   database.collection("post").add({
@@ -177,6 +182,21 @@ const save = () => {
     console.error("Error adding document: ", error);
   });
 };
+
+const sendPost = () => {
+
+database.collection("post").get()
+    .then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+            // doc.data() is never undefined for query doc snapshots
+            console.log(doc.id, " => ", doc.data());
+        });
+    })
+    .catch(function(error) {
+        console.log("Error getting documents: ", error);
+    });
+}
+
 
 
 //   docRef.set({
