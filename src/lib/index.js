@@ -62,5 +62,5 @@ const singUpNewUser = (email, password) => {
 
 
 export {
-  myFunction, closeSession, emailVerification, signInUser, singUpNewUser,
+  myFunction, closeSession, signInUser, singUpNewUser,
 };
