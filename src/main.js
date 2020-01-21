@@ -149,6 +149,7 @@ function createPost(){
   contentPost.appendChild(input);
   // creamos botton de envio de post
   const saveButton = document.createElement('button');
+
   saveButton.innerHTML = 'Save Post'
   saveButton.addEventListener('click', () => {
     savePost();
@@ -183,6 +184,7 @@ const savePost = () => {
   });
 };
 
+
 const sendPost = () => {
 
 database.collection("post").get()
@@ -196,7 +198,6 @@ database.collection("post").get()
         console.log("Error getting documents: ", error);
     });
 }
-
 
 
 //   docRef.set({
