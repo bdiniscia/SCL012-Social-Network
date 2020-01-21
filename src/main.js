@@ -110,6 +110,7 @@ function afterLogIn(user) {
     contentPage.innerHTML = '<h3>Bienvenido</h3>';
     contentPage.appendChild(buttonClose);
     authSection.innerHTML = '';
+    createPost();
   } else {
     window.location.hash = 'NeedVerification';
     console.log('No está verificado');
@@ -137,12 +138,32 @@ window.addEventListener('hashchange', () => {
 
 // Logica Post
 
-//  const docRef = firestore.collection("post").doc("postUser");
-//  const outputHeader = document.querySelector('postOutPut');
-//  const inputTexField = document.querySelector('post');
-//  const saveButton = document.querySelector('saveButtond');
+const contentPost = document.getElementById('contentPost');
 
-saveButton.addEventListener('click', () => {
+function createPost(){
+  //aquí agregamos el componente de tipo input
+  const input = document.createElement("INPUT");
+  //aquí indicamos que es un input de tipo text
+  input.type = 'text';
+  //y por ultimo agreamos el componente creado al padre
+  contentPost.appendChild(input);
+  // creamos botton de envio de post
+  const saveButton = document.createElement('button');
+  saveButton.innerHTML = 'Enviar Post'
+  saveButton.addEventListener('click', () => {
+    save();
+  })
+  contentPost.appendChild(saveButton);
+}
+
+
+
+// //  const docRef = firestore.collection("post").doc("postUser");
+// //  const outputHeader = document.querySelector('postOutPut');
+// //  const inputTexField = document.querySelector('post');
+// //  const saveButton = document.querySelector('saveButtond');
+
+const save = () => {
   //const texToSave = inputTexField.value;
   //console.log("I am going to save" + texToSave + " to Firestore");
   database.collection("post").add({
@@ -156,7 +177,7 @@ saveButton.addEventListener('click', () => {
   .catch(error => {
     console.error("Error adding document: ", error);
   });
-});
+};
 
 
 //   docRef.set({
@@ -169,5 +190,3 @@ saveButton.addEventListener('click', () => {
 //     console.log("Got an error", error);
 //   });
 // })
-
-
