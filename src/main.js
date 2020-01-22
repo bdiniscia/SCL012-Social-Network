@@ -140,23 +140,35 @@ window.addEventListener('hashchange', () => {
 
 const contentPost = document.getElementById('contentPost');
 
+//aquí agregamos el componente de tipo input
+const input = document.createElement("INPUT");
+//aquí indicamos que es un input de tipo text
+input.type = 'text';
+//y por ultimo agreamos el componente creado al padre
+contentPost.appendChild(input);
+
 function createPost(){
   //aquí agregamos el componente de tipo input
-  const input = document.createElement("INPUT");
+  // const input = document.createElement("INPUT");
   //aquí indicamos que es un input de tipo text
-  input.type = 'text';
+  // input.type = 'text';
   //y por ultimo agreamos el componente creado al padre
-  contentPost.appendChild(input);
+  // contentPost.appendChild(input);
   // creamos botton de envio de post
   const saveButton = document.createElement('button');
 
   saveButton.innerHTML = 'Save Post'
   saveButton.addEventListener('click', () => {
+    // const texToSave = input.value;
+    // console.log(texToSave);
     savePost();
   })
   const loadButton = document.createElement('button');
   loadButton.innerHTML = 'Load Post'
   loadButton.addEventListener('click', () =>{
+    // const texToSave = input.value;
+    // console.log(texToSave);
+
     sendPost();
   })
   contentPost.appendChild(saveButton);
@@ -169,14 +181,16 @@ function createPost(){
 // //  const saveButton = document.querySelector('saveButtond');
 
 const savePost = () => {
-  //const texToSave = inputTexField.value;
-  //console.log("I am going to save" + texToSave + " to Firestore");
+  const texToSave = input.value;
+  console.log("I am going to save " + texToSave + " to Firestore");
   database.collection("post").add({
-    first: "SEGUNDOOO",
-    last: "POST",
-    born: "WOOOOHOOO"
+    POST: texToSave
+    // first: "SEGUNDOOO",
+    // last: "POST",
+    // born: "WOOOOHOOO"
   })
   .then(docRef => {
+    console.log("Status Saved!");
     console.log("Document written with ID: ", docRef.id);
   })
   .catch(error => {
@@ -186,10 +200,16 @@ const savePost = () => {
 
 
 const sendPost = () => {
+  const texToSave = input.value;
+  console.log("I am going to save " + texToSave + " to Firestore");
 
 database.collection("post").get()
     .then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
+            // if (doc && doc.exists){
+            //   const myData = doc.data();
+
+            // }
             // doc.data() is never undefined for query doc snapshots
             console.log(doc.id, " => ", doc.data());
         });
