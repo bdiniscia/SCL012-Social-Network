@@ -140,6 +140,13 @@ window.addEventListener('hashchange', () => {
 
 const contentPost = document.getElementById('contentPost');
 
+//aquí agregamos el componente de tipo input
+const input = document.createElement("INPUT");
+//aquí indicamos que es un input de tipo text
+input.type = 'text';
+//y por ultimo agreamos el componente creado al padre
+contentPost.appendChild(input);
+
 function createPost(){
   // aquí agregamos el componente de tipo input
   const input = document.createElement("INPUT");
@@ -161,7 +168,6 @@ function createPost(){
   loadButton.addEventListener('click', () =>{
     const textToSave = input.value;
     console.log(textToSave);
-
     sendPost(textToSave);
   })
   contentPost.appendChild(saveButton);
@@ -169,12 +175,12 @@ function createPost(){
 }
 
 
+
 const savePost = (textPost) => {
   const texToSave = textPost;
   console.log("I am going to save " + texToSave + " to Firestore");
   database.collection("post").add({
     POST: texToSave
-
   })
   .then(docRef => {
     console.log("Status Saved!");
@@ -184,6 +190,7 @@ const savePost = (textPost) => {
     console.error("Error adding document: ", error);
   });
 };
+
 
 
 const sendPost = (textPost) => {
