@@ -161,6 +161,7 @@ function createPost(){
   saveButton.addEventListener('click', () => {
     // const texToSave = input.value;
     // console.log(texToSave);
+
     savePost();
   })
   const loadButton = document.createElement('button');
@@ -168,7 +169,6 @@ function createPost(){
   loadButton.addEventListener('click', () =>{
     // const texToSave = input.value;
     // console.log(texToSave);
-
     sendPost();
   })
   contentPost.appendChild(saveButton);
@@ -208,7 +208,6 @@ database.collection("post").get()
         querySnapshot.forEach(function(doc) {
             // if (doc && doc.exists){
             //   const myData = doc.data();
-
             // }
             // doc.data() is never undefined for query doc snapshots
             console.log(doc.id, " => ", doc.data());
