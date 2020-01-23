@@ -1,25 +1,37 @@
 // Este es el punto de entrada de tu aplicacion
-import { myFunction, closeSession, signInUser, singUpNewUser } from './lib/index.js';
-let database = firebase.firestore();
+import {
+  myFunction, closeSession, signInUser, singUpNewUser, signUpGoogle,
+} from './lib/index.js';
+
+const database = firebase.firestore();
 // let db = firebase.database();
 
 myFunction();
 
 const authSection = document.getElementById('authSection'); // Sección de registro
-const contentPage = document.getElementById('contentPage');
+const contentPage = document.getElementById('contentPage'); // Sección de parte de arriba del home
+const contentPost = document.getElementById('contentPost'); // Sección de los posts
 
 // Función que carga el Sign In
 function loadSignIn() {
-  location.hash = '/SignIn';
+  window.location.hash = '/SignIn'; // Le asigno el Hash a la página
+  // Botón de entrar
   const sbSingIn = document.createElement('button');
   sbSingIn.innerText = 'Entrar';
   sbSingIn.addEventListener('click', () => {
     sendButtonLogIn();
   });
+  // Botón de ya tengo cuenta
   const toggleToSignUp = document.createElement('button');
   toggleToSignUp.innerHTML = 'No tengo cuenta';
   toggleToSignUp.addEventListener('click', () => {
     loadSignUp();
+  });
+  // Botón de entrar con Google
+  const buttonGoogle = document.createElement('button');
+  buttonGoogle.innerHTML = `Ingresa con Google`;
+  buttonGoogle.addEventListener('click', () => {
+    signUpGoogle();
   });
   authSection.innerHTML = `
     <h1>Log in</h1>
@@ -27,8 +39,10 @@ function loadSignIn() {
     <input type="password" id="passwordLogIn" placeholder="Contraseña">
   `;
   authSection.appendChild(sbSingIn);
+  authSection.appendChild(buttonGoogle);
   authSection.appendChild(toggleToSignUp);
   contentPage.innerHTML = '';
+  contentPost.innerHTML = '';
 }
 
 // Función que carga el Sign Up
@@ -44,21 +58,30 @@ function loadSignUp() {
   toggleToSignIn.addEventListener('click', () => {
     loadSignIn();
   });
+  const buttonGoogle = document.createElement('button');
+  buttonGoogle.innerHTML = `Ingresa con Google`;
+  buttonGoogle.addEventListener('click', () => {
+    signUpGoogle();
+  });
 
   authSection.innerHTML = `
       <h1>Sign up</h1>
+      <input type="text" id="name" placeholder="Nombre">
       <input type="email" id="email" placeholder="Email">
       <input type="password" id="password" placeholder="Contraseña">
   `;
   authSection.appendChild(sb);
+  authSection.appendChild(buttonGoogle);
   authSection.appendChild(toggleToSignIn);
   contentPage.innerHTML = '';
+  contentPost.innerHTML = '';
 }
 
 // Crear y Registrar usuario con Firebase
 const sendButton = () => {
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
+  const name = document.getElementById('name').value;
 
   singUpNewUser(email, password);
 };
@@ -96,13 +119,11 @@ function observerAuth() {
     }
   });
 }
-
 observerAuth();
 
 // Función para generar el contenido luego del Log in.
-function afterLogIn(user) {
+const afterLogIn = (user) => {
   if (user.emailVerified) {
-    window.location.hash = '/home';
     const buttonClose = document.createElement('button');
     buttonClose.innerHTML = 'Cerrar Sesión';
     buttonClose.addEventListener('click', () => {
@@ -111,7 +132,9 @@ function afterLogIn(user) {
     contentPage.innerHTML = '<h3>Bienvenido</h3>';
     contentPage.appendChild(buttonClose);
     authSection.innerHTML = '';
+    contentPost.innerHTML = '';
     createPost();
+    window.location.hash = '/home';
   } else {
     window.location.hash = '/NeedVerification';
     console.log('No está verificado');
@@ -124,8 +147,9 @@ function afterLogIn(user) {
     contentPage.appendChild(buttonClose);
     authSection.innerHTML = '';
   }
-}
+};
 
+// El Routing
 window.addEventListener('hashchange', () => {
   if (window.location.hash === '#/SignIn') {
     loadSignIn();
@@ -139,25 +163,16 @@ window.addEventListener('hashchange', () => {
 
 // Logica Post
 
-const contentPost = document.getElementById('contentPost');
-
-//aquí agregamos el componente de tipo input
-const input = document.createElement("INPUT");
-//aquí indicamos que es un input de tipo text
-input.type = 'text';
-//y por ultimo agreamos el componente creado al padre
-contentPost.appendChild(input);
-
-function createPost(){
+const createPost = () => {
   // aquí agregamos el componente de tipo input
-  const input = document.createElement("INPUT");
+  const input = document.createElement('INPUT');
   // aquí indicamos que es un input de tipo text
   input.type = 'text';
   // y por ultimo agreamos el componente creado al padre
   contentPost.appendChild(input);
   // creamos botton de envio de post
   const saveButton = document.createElement('button');
-  saveButton.innerHTML = 'Save Post'
+  saveButton.innerHTML = 'Save Post';
   saveButton.addEventListener('click', () => {
     const textToSave = input.value;
     console.log(textToSave);
@@ -168,8 +183,6 @@ function createPost(){
   contentPost.appendChild(saveButton);
   
 }
-
-
 
 const savePost = (textPost) => {
   const texToSave = textPost;
@@ -206,8 +219,8 @@ const sendPost = (textPost) => {
             `
         });
     })
-    .catch(function(error) {
-        console.log("Error getting documents: ", error);
+    .catch((error) => {
+      console.error('Error adding document: ', error);
     });
 }
 
