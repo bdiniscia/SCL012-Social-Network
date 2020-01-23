@@ -1,6 +1,7 @@
 // Este es el punto de entrada de tu aplicacion
 import { myFunction, closeSession, signInUser, singUpNewUser } from './lib/index.js';
 let database = firebase.firestore();
+// let db = firebase.database();
 
 myFunction();
 
@@ -156,22 +157,16 @@ function createPost(){
   contentPost.appendChild(input);
   // creamos botton de envio de post
   const saveButton = document.createElement('button');
-
   saveButton.innerHTML = 'Save Post'
   saveButton.addEventListener('click', () => {
     const textToSave = input.value;
     console.log(textToSave);
     savePost(textToSave);
-  })
-  const loadButton = document.createElement('button');
-  loadButton.innerHTML = 'Load Post'
-  loadButton.addEventListener('click', () =>{
-    const textToSave = input.value;
-    console.log(textToSave);
     sendPost(textToSave);
   })
+ 
   contentPost.appendChild(saveButton);
-  contentPost.appendChild(loadButton);
+  
 }
 
 
@@ -192,18 +187,35 @@ const savePost = (textPost) => {
 };
 
 
+const contentMessage = document.getElementById('contentMessage');
 
 const sendPost = (textPost) => {
   const texToSave = textPost;
   console.log("I am going to save " + texToSave + " to Firestore");
-
-database.collection("post").get()
-    .then(function(querySnapshot) {
-        querySnapshot.forEach(function(doc) {
+  database.collection("post")
+  .onSnapshot((querySnapshot) => {
+      contentMessage.innerHTML = '';
+      querySnapshot.forEach((doc) => {
             console.log(doc.id, " => ", doc.data());
+            contentMessage.innerHTML += `
+            <div>
+            <div class="message"> ${doc.data().POST}</div>
+            <td> <button class="btnClear"></button>Editar</button>
+            <td> <button class="btnClear"></button>Eliminar</button>
+            </div>
+            `
         });
     })
     .catch(function(error) {
         console.log("Error getting documents: ", error);
     });
 }
+
+// function deletePost(id){
+//   database.collection("post").doc(id).delete().then(function() {
+//       console.log
+
+//   }
+
+// }
+
