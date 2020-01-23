@@ -1,6 +1,6 @@
 // Este es el punto de entrada de tu aplicacion
 import {
-  myFunction, closeSession, signInUser, singUpNewUser,
+  myFunction, closeSession, signInUser, singUpNewUser, signUpGoogle,
 } from './lib/index.js';
 
 const database = firebase.firestore();
@@ -13,16 +13,24 @@ const contentPost = document.getElementById('contentPost'); // Sección de los p
 
 // Función que carga el Sign In
 function loadSignIn() {
-  window.location.hash = '/SignIn';
+  window.location.hash = '/SignIn'; // Le asigno el Hash a la página
+  // Botón de entrar
   const sbSingIn = document.createElement('button');
   sbSingIn.innerText = 'Entrar';
   sbSingIn.addEventListener('click', () => {
     sendButtonLogIn();
   });
+  // Botón de ya tengo cuenta
   const toggleToSignUp = document.createElement('button');
   toggleToSignUp.innerHTML = 'No tengo cuenta';
   toggleToSignUp.addEventListener('click', () => {
     loadSignUp();
+  });
+  // Botón de entrar con Google
+  const buttonGoogle = document.createElement('button');
+  buttonGoogle.innerHTML = `Ingresa con Google`;
+  buttonGoogle.addEventListener('click', () => {
+    signUpGoogle();
   });
   authSection.innerHTML = `
     <h1>Log in</h1>
@@ -30,6 +38,7 @@ function loadSignIn() {
     <input type="password" id="passwordLogIn" placeholder="Contraseña">
   `;
   authSection.appendChild(sbSingIn);
+  authSection.appendChild(buttonGoogle);
   authSection.appendChild(toggleToSignUp);
   contentPage.innerHTML = '';
   contentPost.innerHTML = '';
@@ -48,6 +57,11 @@ function loadSignUp() {
   toggleToSignIn.addEventListener('click', () => {
     loadSignIn();
   });
+  const buttonGoogle = document.createElement('button');
+  buttonGoogle.innerHTML = `Ingresa con Google`;
+  buttonGoogle.addEventListener('click', () => {
+    signUpGoogle();
+  });
 
   authSection.innerHTML = `
       <h1>Sign up</h1>
@@ -56,6 +70,7 @@ function loadSignUp() {
       <input type="password" id="password" placeholder="Contraseña">
   `;
   authSection.appendChild(sb);
+  authSection.appendChild(buttonGoogle);
   authSection.appendChild(toggleToSignIn);
   contentPage.innerHTML = '';
   contentPost.innerHTML = '';
@@ -108,7 +123,6 @@ observerAuth();
 // Función para generar el contenido luego del Log in.
 const afterLogIn = (user) => {
   if (user.emailVerified) {
-    window.location.hash = '/home';
     const buttonClose = document.createElement('button');
     buttonClose.innerHTML = 'Cerrar Sesión';
     buttonClose.addEventListener('click', () => {
@@ -119,6 +133,7 @@ const afterLogIn = (user) => {
     authSection.innerHTML = '';
     contentPost.innerHTML = '';
     createPost();
+    window.location.hash = '/home';
   } else {
     window.location.hash = '/NeedVerification';
     console.log('No está verificado');
@@ -140,7 +155,7 @@ window.addEventListener('hashchange', () => {
   } else if (window.location.hash === '#/SignUp') {
     loadSignUp();
   } else if (window.location.hash === '#/home' || window.location.hash === '#/NeedVerification') {
-    afterLogIn(user);
+    observerAuth();
   }
 });
 
