@@ -12,8 +12,9 @@ const authSection = document.getElementById('authSection'); // Sección de regis
 const contentPage = document.getElementById('contentPage'); // Sección de parte de arriba del home
 const contentPost = document.getElementById('contentPost'); // Sección de los posts
 
+
 // Función que carga el Sign In
-function loadSignIn() {
+const loadSignIn = () => {
   window.location.hash = '/SignIn'; // Le asigno el Hash a la página
   // Botón de entrar
   const sbSingIn = document.createElement('button');
@@ -29,7 +30,7 @@ function loadSignIn() {
   });
   // Botón de entrar con Google
   const buttonGoogle = document.createElement('button');
-  buttonGoogle.innerHTML = `Ingresa con Google`;
+  buttonGoogle.innerHTML = 'Ingresa con Google';
   buttonGoogle.addEventListener('click', () => {
     signUpGoogle();
   });
@@ -43,10 +44,10 @@ function loadSignIn() {
   authSection.appendChild(toggleToSignUp);
   contentPage.innerHTML = '';
   contentPost.innerHTML = '';
-}
+};
 
 // Función que carga el Sign Up
-function loadSignUp() {
+const loadSignUp = () => {
   window.location.hash = '/SignUp';
   const sb = document.createElement('button');
   sb.innerText = 'Registrarme';
@@ -59,7 +60,7 @@ function loadSignUp() {
     loadSignIn();
   });
   const buttonGoogle = document.createElement('button');
-  buttonGoogle.innerHTML = `Ingresa con Google`;
+  buttonGoogle.innerHTML = 'Ingresa con Google';
   buttonGoogle.addEventListener('click', () => {
     signUpGoogle();
   });
@@ -75,7 +76,7 @@ function loadSignUp() {
   authSection.appendChild(toggleToSignIn);
   contentPage.innerHTML = '';
   contentPost.innerHTML = '';
-}
+};
 
 // Crear y Registrar usuario con Firebase
 const sendButton = () => {
@@ -96,7 +97,7 @@ const sendButtonLogIn = () => {
 };
 
 // Observador que te dice si hay usuario logueado o no
-function observerAuth() {
+const observerAuth = () => {
   firebase.auth().onAuthStateChanged((user) => {
     if (user) {
       console.log('Existe usuario activo');
@@ -118,12 +119,13 @@ function observerAuth() {
       // ...
     }
   });
-}
+};
 observerAuth();
 
 // Función para generar el contenido luego del Log in.
 const afterLogIn = (user) => {
   if (user.emailVerified) {
+    window.location.hash = '/home';
     const buttonClose = document.createElement('button');
     buttonClose.innerHTML = 'Cerrar Sesión';
     buttonClose.addEventListener('click', () => {
@@ -134,7 +136,6 @@ const afterLogIn = (user) => {
     authSection.innerHTML = '';
     contentPost.innerHTML = '';
     createPost();
-    window.location.hash = '/home';
   } else {
     window.location.hash = '/NeedVerification';
     console.log('No está verificado');
@@ -156,7 +157,8 @@ window.addEventListener('hashchange', () => {
   } else if (window.location.hash === '#/SignUp') {
     loadSignUp();
   } else if (window.location.hash === '#/home' || window.location.hash === '#/NeedVerification') {
-    observerAuth();
+    const actualUser = firebase.auth().currentUser;
+    afterLogIn(actualUser);
   }
 });
 
@@ -178,25 +180,24 @@ const createPost = () => {
     console.log(textToSave);
     savePost(textToSave);
     sendPost(textToSave);
-  })
- 
+  });
+
   contentPost.appendChild(saveButton);
-  
-}
+};
 
 const savePost = (textPost) => {
   const texToSave = textPost;
-  console.log("I am going to save " + texToSave + " to Firestore");
-  database.collection("post").add({
-    POST: texToSave
+  console.log('I am going to save ' + texToSave + ' to Firestore');
+  database.collection('post').add({
+    POST: texToSave,
   })
-  .then(docRef => {
-    console.log("Status Saved!");
-    console.log("Document written with ID: ", docRef.id);
-  })
-  .catch(error => {
-    console.error("Error adding document: ", error);
-  });
+    .then((docRef) => {
+      console.log('Status Saved!');
+      console.log('Document written with ID: ', docRef.id);
+    })
+    .catch((error) => {
+      console.error('Error adding document: ', error);
+    });
 };
 
 
@@ -204,31 +205,28 @@ const contentMessage = document.getElementById('contentMessage');
 
 const sendPost = (textPost) => {
   const texToSave = textPost;
-  console.log("I am going to save " + texToSave + " to Firestore");
-  database.collection("post")
-  .onSnapshot((querySnapshot) => {
+  console.log('I am going to save ' + texToSave + ' to Firestore');
+  database.collection('post')
+    .onSnapshot((querySnapshot) => {
       contentMessage.innerHTML = '';
       querySnapshot.forEach((doc) => {
-            console.log(doc.id, " => ", doc.data());
-            contentMessage.innerHTML += `
+        console.log(doc.id, ' => ', doc.data());
+        contentMessage.innerHTML += `
             <div>
             <div class="message"> ${doc.data().POST}</div>
             <td> <button class="btnClear"></button>Editar</button>
             <td> <button class="btnClear"></button>Eliminar</button>
             </div>
-            `
-        });
+            `;
+      });
     })
     .catch((error) => {
       console.error('Error adding document: ', error);
     });
-}
+};
 
 // function deletePost(id){
 //   database.collection("post").doc(id).delete().then(function() {
 //       console.log
-
 //   }
-
 // }
-
