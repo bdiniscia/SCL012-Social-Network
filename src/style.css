@@ -1,3 +1,36 @@
+<<<<<<< HEAD
+=======
+
+body{
+    background-color: rgba(62, 109, 252, 1);
+    font-family: 'Roboto', sans-serif;
+}
+
+#authSection{
+    display:flex;
+    justify-content: center;
+    align-content: center;
+}
+
+
+.logForm{
+    display:flex;
+    margin:0 auto;
+    flex-direction: column;
+    width: 233px;
+    height: 40px;
+    background-color: aliceblue;
+}
+
+
+/*
+position: absolute;
+width: 233px;
+height: 40px;
+left: 64px;
+top: 164px;
+=======
+>>>>>>> 2427c20ecb9080b0fc3b7fde499c2e7b7434de49
 .btnClear{
     
 }
@@ -6,4 +39,9 @@
 width: 50px;
 height: 50px;
 border: 1px solid #FFFFFF;
+<<<<<<< HEAD
 }
+=======
+}
+
+>>>>>>> 2427c20ecb9080b0fc3b7fde499c2e7b7434de49

@@ -40,12 +40,18 @@ const signInUser = (email, password) => {
       const errorMessage = error.message;
       console.log(errorCode);
       console.log(errorMessage);
+      alert(errorMessage);
     // ...
     });
 };
 
-const singUpNewUser = (email, password) => {
+const singUpNewUser = (email, password, name) => {
   firebase.auth().createUserWithEmailAndPassword(email, password)
+    .then((result) => {
+      return result.user.updateProfile({
+        displayName: name,
+      });
+    })
     .then(() => {
       emailVerification();
     })
@@ -65,26 +71,35 @@ const singUpNewUser = (email, password) => {
 };
 
 const signUpGoogle = () => {
-  let provider = new firebase.auth.GoogleAuthProvider();
+  const provider = new firebase.auth.GoogleAuthProvider();
 
   firebase.auth().signInWithPopup(provider).then((result) => {
-    // // This gives you a Google Access Token. You can use it to access the Google API.
-    // var token = result.credential.accessToken;
-    // // The signed-in user info.
-    // var user = result.user;
+    // This gives you a Google Access Token. You can use it to access the Google API.
+    const token = result.credential.accessToken;
+    // The signed-in user info.
+    const user = result.user;
     // ...
   }).catch((error) => {
     // Handle Errors here.
-    var errorCode = error.code;
-    var errorMessage = error.message;
+    const errorCode = error.code;
+    const errorMessage = error.message;
     // The email of the user's account used.
-    var email = error.email;
+    const email = error.email;
     // The firebase.auth.AuthCredential type that was used.
-    var credential = error.credential;
+    const credential = error.credential;
     // ...
   });
 };
 
+const forgotPassword = (emailAddress) => {
+  firebase.auth().sendPasswordResetEmail(emailAddress).then(() => {
+    // Email sent.
+  }).catch((error) => {
+    // An error happened.
+  });
+};
+
+
 export {
-  myFunction, closeSession, signInUser, singUpNewUser, signUpGoogle
+  myFunction, closeSession, signInUser, singUpNewUser, signUpGoogle, forgotPassword,
 };
