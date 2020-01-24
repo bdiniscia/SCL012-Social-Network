@@ -180,9 +180,9 @@ const createPost = () => {
     sendPost(textToSave);
   })
  
-  contentPost.appendChild(saveButton);
-  
+  contentPost.appendChild(saveButton); 
 }
+
 
 const savePost = (textPost) => {
   const texToSave = textPost;
@@ -209,26 +209,37 @@ const sendPost = (textPost) => {
   .onSnapshot((querySnapshot) => {
       contentMessage.innerHTML = '';
       querySnapshot.forEach((doc) => {
+            const divPost = document.createElement('div');
+            contentMessage.appendChild(divPost);
             console.log(doc.id, " => ", doc.data());
-            contentMessage.innerHTML += `
-            <div>
-            <div class="message"> ${doc.data().POST}</div>
-            <td> <button class="btnClear"></button>Editar</button>
-            <td> <button class="btnClear"></button>Eliminar</button>
-            </div>
+            divPost.innerHTML +=
             `
+            <div class="message"> ${doc.data().POST}</div>
+            `
+            const deleteButton = document.createElement('button');
+            deleteButton.innerHTML = 'Eliminar';
+            deleteButton.addEventListener('click' ,() => {
+              deletePost(doc.id);
+            })
+
+            const editButton = document.createElement('button');
+            editButton.innerHTML = 'Editar';
+            editButton.addEventListener('click', () => {
+
+            })
+            divPost.appendChild(deleteButton);
+            divPost.appendChild(editButton);
         });
     })
-    .catch((error) => {
-      console.error('Error adding document: ', error);
+    .catch(error => {
+        console.log("Error getting documents: ", error);
     });
 }
 
-// function deletePost(id){
-//   database.collection("post").doc(id).delete().then(function() {
-//       console.log
-
-//   }
-
-// }
-
+function deletePost(id){
+  database.collection("post").doc(id).delete().then(function() {
+    console.log("Document successfully deleted!");
+  }).catch(function(error) {
+    console.error("Error removing document: ", error);
+  });
+}
