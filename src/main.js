@@ -1,6 +1,6 @@
 // Este es el punto de entrada de tu aplicacion
 import {
-  myFunction, closeSession, signInUser, singUpNewUser, signUpGoogle,
+  myFunction, closeSession, signInUser, singUpNewUser, signUpGoogle, forgotPassword,
 } from './lib/index.js';
 
 const database = firebase.firestore();
@@ -84,7 +84,7 @@ const sendButton = () => {
   const password = document.getElementById('password').value;
   const name = document.getElementById('name').value;
 
-  singUpNewUser(email, password);
+  singUpNewUser(email, password, name);
 };
 
 
@@ -187,7 +187,7 @@ const createPost = () => {
 
 const savePost = (textPost) => {
   const texToSave = textPost;
-  console.log('I am going to save ' + texToSave + ' to Firestore');
+  console.log(`I am going to save ${texToSave} to Firestore`);
   database.collection('post').add({
     POST: texToSave,
   })
@@ -205,7 +205,7 @@ const contentMessage = document.getElementById('contentMessage');
 
 const sendPost = (textPost) => {
   const texToSave = textPost;
-  console.log('I am going to save ' + texToSave + ' to Firestore');
+  console.log(`I am going to save ${texToSave} to Firestore`);
   database.collection('post')
     .onSnapshot((querySnapshot) => {
       contentMessage.innerHTML = '';
@@ -224,6 +224,7 @@ const sendPost = (textPost) => {
       console.error('Error adding document: ', error);
     });
 };
+
 
 // function deletePost(id){
 //   database.collection("post").doc(id).delete().then(function() {
