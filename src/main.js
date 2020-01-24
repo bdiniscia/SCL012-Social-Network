@@ -13,7 +13,7 @@ const contentPage = document.getElementById('contentPage'); // Sección de parte
 const contentPost = document.getElementById('contentPost'); // Sección de los posts
 
 
-// Función que carga el Sign In
+// <------Función que carga el Sign In------>
 const loadSignIn = () => {
   window.location.hash = '/SignIn'; // Le asigno el Hash a la página
   // Botón de entrar
@@ -34,19 +34,44 @@ const loadSignIn = () => {
   buttonGoogle.addEventListener('click', () => {
     signUpGoogle();
   });
+  // Link de olvidé contraseña
+  const linkToForgot = document.createElement('span');
+  linkToForgot.innerHTML = `Olvidé mi contraseña`;
+  linkToForgot.addEventListener('click', () => {
+    generateForgot();
+  });
   authSection.innerHTML = `
     <h1>Log in</h1>
     <input type="email" id="emailLogIn" placeholder="Email">
     <input type="password" id="passwordLogIn" placeholder="Contraseña">
   `;
   authSection.appendChild(sbSingIn);
+  authSection.appendChild(linkToForgot);
   authSection.appendChild(buttonGoogle);
   authSection.appendChild(toggleToSignUp);
   contentPage.innerHTML = '';
   contentPost.innerHTML = '';
 };
 
-// Función que carga el Sign Up
+// <-----Función de Olvidé mi Contraseña----->
+const generateForgot = () => {
+  window.location.hash = '/forgot';
+  const inputEmail = document.createElement('input');
+  inputEmail.placeholder = 'Tu email';
+  const buttonForgot = document.createElement('button');
+  buttonForgot.innerHTML = 'Recuperar contraseña';
+  
+  buttonForgot.addEventListener('click', () => {
+    forgotPassword(inputEmail.value);
+  });
+  contentPage.innerHTML = '';
+  contentPost.innerHTML = '';
+  authSection.innerHTML = '';
+  authSection.appendChild(inputEmail);
+  authSection.appendChild(buttonForgot);
+};
+
+// <------Función que carga el Sign Up------>
 const loadSignUp = () => {
   window.location.hash = '/SignUp';
   const sb = document.createElement('button');
@@ -78,7 +103,7 @@ const loadSignUp = () => {
   contentPost.innerHTML = '';
 };
 
-// Crear y Registrar usuario con Firebase
+// <------Crear y Registrar usuario con Firebase------>
 const sendButton = () => {
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
@@ -88,7 +113,7 @@ const sendButton = () => {
 };
 
 
-// Loggear usuario con Firebase
+// <------Loggear usuario con Firebase------>
 const sendButtonLogIn = () => {
   const email = document.getElementById('emailLogIn').value;
   const password = document.getElementById('passwordLogIn').value;
@@ -96,7 +121,7 @@ const sendButtonLogIn = () => {
   signInUser(email, password);
 };
 
-// Observador que te dice si hay usuario logueado o no
+// <------Observador que te dice si hay usuario logueado o no------>
 const observerAuth = () => {
   firebase.auth().onAuthStateChanged((user) => {
     if (user) {
@@ -122,7 +147,7 @@ const observerAuth = () => {
 };
 observerAuth();
 
-// Función para generar el contenido luego del Log in.
+// <------Función para generar el contenido luego del Log in------>
 const afterLogIn = (user) => {
   if (user.emailVerified) {
     window.location.hash = '/home';
@@ -150,7 +175,8 @@ const afterLogIn = (user) => {
   }
 };
 
-// El Routing
+
+// <-----El Routing----->
 window.addEventListener('hashchange', () => {
   if (window.location.hash === '#/SignIn') {
     loadSignIn();
@@ -159,11 +185,13 @@ window.addEventListener('hashchange', () => {
   } else if (window.location.hash === '#/home' || window.location.hash === '#/NeedVerification') {
     const actualUser = firebase.auth().currentUser;
     afterLogIn(actualUser);
+  } else if (window.location.hash === '#/forgot') {
+    generateForgot();
   }
 });
 
 
-// Logica Post
+// <-----Logica Post------>
 
 const createPost = () => {
   // aquí agregamos el componente de tipo input
