@@ -36,7 +36,7 @@ const loadSignIn = () => {
   });
   // Link de olvidé contraseña
   const linkToForgot = document.createElement('span');
-  linkToForgot.innerHTML = `Olvidé mi contraseña`;
+  linkToForgot.innerHTML = 'Olvidé mi contraseña';
   linkToForgot.addEventListener('click', () => {
     generateForgot();
   });
@@ -152,12 +152,59 @@ observerAuth();
 const afterLogIn = (user) => {
   if (user.emailVerified) {
     window.location.hash = '/home';
+    document.body.style.backgroundColor = "white";
     const buttonClose = document.createElement('button');
     buttonClose.innerHTML = 'Cerrar Sesión';
     buttonClose.addEventListener('click', () => {
       closeSession();
     });
-    contentPage.innerHTML = `<h3>Bienvenido</h3>`;
+    contentPage.innerHTML = ` 
+                            <div class="align">
+                            <nav class="navigation navigation--inline">
+                            <img src="img/Logo2-long.png" id="logo"> 
+    <ul class="list-icon">
+      <li>
+        <a class="icons-a" href="#">
+          <img class="icon icon--2x icon-white" src="img/home.svg">
+          <span class="textIcon">Inicio</span>
+        </a>
+      </li>
+      <li>
+        <a class="icons-a" href="#">
+          <img class="icon icon--2x icon-white" src="img/work.svg">
+          <span class="textIcon">Trabajo</span>
+        </a>
+      </li>
+      <li>
+        <a class="icons-a" href="#">
+          <img class="icon icon--2x icon-white" src="img/passport.svg">
+          <span class="textIcon">Visa</span>
+        </a>
+      </li>
+      <li>
+        <a class="icons-a" href="#">
+          <img class="icon icon--2x icon-white" src="img/rent.svg">
+          <span class="textIcon">Arriendos</span>
+        </a>
+      </li>
+      <li>
+        <a class="icons-a" href="#">
+          <img class="icon icon--2x icon-white" src="img/more.svg">
+          <span class="textIcon">Otros</span>
+        </a>
+      </li>
+          <li class="dropdown">
+            <img class="icon icon--2x dropbtn" id="profilePic" src=${user.photoURL}>
+            <div class="dropdown-content">
+              <a href="#">Ver mi perfil</a>
+              <a href="#">Cerrar Sesión</a>
+            </div>
+          </li>
+    </ul>
+  </nav>
+  
+  </div>                          
+  `;
     contentPage.appendChild(buttonClose);
     authSection.innerHTML = '';
     contentPost.innerHTML = '';
