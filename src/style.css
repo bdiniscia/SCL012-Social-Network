@@ -1,6 +1,8 @@
 body{
     background-color: #5386e4;
     font-family: 'Roboto', sans-serif;
+    margin: 0;
+    min-height: 100%;
 }
 
 #authSection{
@@ -23,13 +25,15 @@ body{
     width: 18em;
     display: inline;
     vertical-align: middle;
-    padding-top: 5px;
+    padding-top: 8px;
     padding-left: 10px;
 }
 
 #profilePic {
     border-radius: 50%;
     padding: 25px;
+    width: 1.3em;
+    height: 1.3em;
 }
 
 .arrow-down {
@@ -68,20 +72,9 @@ body{
   
   /* layout/base.css */
   
-  :root {
-    --body-background-color: #82a8ee;
-  }
-  
   html {
     height: 100%;
   }
-  
-  body {
-    margin: 0;
-    min-height: 100%;
-  }
-  
-  /* modules/anchor.css */
   
   .icons-a {
     outline: 0;
@@ -90,17 +83,8 @@ body{
   
   /* modules/icon.css */
   
-  :root {
-    --icon-fill-color: #97adc6;
-  }
-  
-  .icons {
-    display: none;
-  }
-  
   .icon {
     display: inline-block;
-    fill: var(--icon-fill-color);
     font-size: 1rem;
     height: 1em;
     vertical-align: middle;
@@ -115,18 +99,11 @@ body{
     filter: invert(99%) sepia(0%) saturate(713%) hue-rotate(32deg) brightness(115%) contrast(100%);
   }
   
-  /* modules/image.css */
-  
-  svg {
-    max-width: 100%;
-  }
-  
   /* modules/navigation.css */
   
   :root {
     --navigation-background-color: #f0f6ff;
     --navigation-border-radius: 0.25rem;
-  
     --navigation-anchor-padding: 1rem;
     --navigation-anchor-text-decoration: none;
   }
@@ -194,33 +171,68 @@ body{
   }
   
   .dropdown-content a {
-    color: black;
+    color: #1e2635;
+    font-family: 'Open Sans', sans-serif;
     padding: 12px 16px;
     text-decoration: none;
     display: block;
+
   }
   
-  .dropdown-content a:hover {background-color: #f1f1f1;}
+  .dropdown-content a:hover {
+      background-color: #f1f1f1;
+    }
   
   .dropdown:hover .dropdown-content {
     display: block;
   }
   
-  
-/*
-position: absolute;
-width: 233px;
-height: 40px;
-left: 64px;
-top: 164px;
-=======
-.btnClear{
-    
-}
+  .top-bar {
+      display: block;
+  }
 
-#contentMessage{
-width: 50px;
-height: 50px;
-border: 1px solid #FFFFFF;
-}
+  .down-bar {
+      display: none;
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      justify-content: space-around;
+      text-align: center;
+      align-items: center;
+  }
+
+  #classOfList {
+      justify-content: space-around;
+  }
+
+
+
+  @media screen and (max-width: 850px) {
+
+    .down-bar {
+        display: flex;
+    }
+
+    #top-bar {
+        display: none;
+    }
+
+    .icons-a {
+        padding: 0;
+    }
+
+    .navigation a {
+        padding: 1em 0 1em 0;
+    }
+
+  }
+
+  @media screen and (max-width: 389px) {
+    #logo {
+        width:60%;
+        align-items: center;
+        padding-top: 4%;
+    }
+
+  }
 

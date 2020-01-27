@@ -129,7 +129,7 @@ const observerAuth = () => {
       afterLogIn(user);
       // User is signed in.
       const displayName = user.displayName;
-      console.log(user);
+    //  console.log(user);
       const email = user.email;
       const emailVerified = user.emailVerified;
       const photoURL = user.photoURL;
@@ -163,52 +163,89 @@ const afterLogIn = (user) => {
                             <nav class="navigation navigation--inline">
                             <img src="img/Logo2-long.png" id="logo"> 
     <ul class="list-icon">
-      <li>
+      <li id="top-bar">
         <a class="icons-a" href="#">
           <img class="icon icon--2x icon-white" src="img/home.svg">
           <span class="textIcon">Inicio</span>
         </a>
       </li>
-      <li>
+      <li id="top-bar">
         <a class="icons-a" href="#">
           <img class="icon icon--2x icon-white" src="img/work.svg">
           <span class="textIcon">Trabajo</span>
         </a>
       </li>
-      <li>
+      <li id="top-bar">
         <a class="icons-a" href="#">
           <img class="icon icon--2x icon-white" src="img/passport.svg">
           <span class="textIcon">Visa</span>
         </a>
       </li>
-      <li>
+      <li id="top-bar">
         <a class="icons-a" href="#">
           <img class="icon icon--2x icon-white" src="img/rent.svg">
           <span class="textIcon">Arriendos</span>
         </a>
       </li>
-      <li>
+      <li id="top-bar">
         <a class="icons-a" href="#">
           <img class="icon icon--2x icon-white" src="img/more.svg">
           <span class="textIcon">Otros</span>
         </a>
       </li>
-          <li class="dropdown">
-            <img class="icon icon--2x dropbtn" id="profilePic" src=${user.photoURL}>
-            <div class="dropdown-content">
-              <a href="#">Ver mi perfil</a>
-              <a href="#">Cerrar Sesión</a>
-            </div>
-          </li>
+      <li class="dropdown">
+        <img class="icon icon--2x dropbtn" id="profilePic" src=${user.photoURL}>
+          <div class="dropdown-content">
+            <a href="#">Ver mi perfil</a>
+            <a href="javascript:closeSession();" id="closeSessionBT">Cerrar Sesión</a>
+          </div>
+      </li>
     </ul>
   </nav>
-  
-  </div>                          
+  </div>           
   `;
     contentPage.appendChild(buttonClose);
     authSection.innerHTML = '';
     contentPost.innerHTML = '';
     createPost();
+    contentPage.innerHTML += `<div class="align down-bar">
+    <nav class="navigation navigation--inline">
+    <ul id="classOfList">
+        <li>
+          <a class="icons-a" href="#">
+            <img class="icon icon--2x icon-white" src="img/home.svg">
+            <span class="textIcon">Inicio</span>
+          </a>
+        </li>
+        <li>
+          <a class="icons-a" href="#">
+            <img class="icon icon--2x icon-white" src="img/work.svg">
+            <span class="textIcon">Trabajo</span>
+          </a>
+        </li>
+        <li>
+          <a class="icons-a" href="#">
+            <img class="icon icon--2x icon-white" src="img/passport.svg">
+            <span class="textIcon">Visa</span>
+          </a>
+        </li>
+        <li>
+          <a class="icons-a" href="#">
+            <img class="icon icon--2x icon-white" src="img/rent.svg">
+            <span class="textIcon">Arriendos</span>
+          </a>
+        </li>
+        <li>
+          <a class="icons-a" href="#">
+            <img class="icon icon--2x icon-white" src="img/more.svg">
+            <span class="textIcon">Otros</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    
+    </div> 
+    `;
   } else {
     window.location.hash = '/NeedVerification';
     console.log('No está verificado');
@@ -257,7 +294,6 @@ const createPost = () => {
     savePost(textToSave);
     sendPost(textToSave);
   });
-
   contentPost.appendChild(saveButton);
 };
 
