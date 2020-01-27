@@ -153,22 +153,17 @@ const afterLogIn = (user) => {
   if (user.emailVerified) {
     window.location.hash = '/home';
     document.body.style.backgroundColor = "white";
-    const buttonClose = document.createElement('button');
-    buttonClose.innerHTML = 'Cerrar Sesión';
-    buttonClose.addEventListener('click', () => {
-      closeSession();
-    });
     contentPage.innerHTML = ` 
-                            <div class="align">
-                            <nav class="navigation navigation--inline">
-                            <img src="img/Logo2-long.png" id="logo"> 
-    <ul class="list-icon">
-      <li id="top-bar">
-        <a class="icons-a" href="#">
-          <img class="icon icon--2x icon-white" src="img/home.svg">
-          <span class="textIcon">Inicio</span>
-        </a>
-      </li>
+    <div class="align">
+      <nav class="navigation navigation--inline">
+        <img src="img/Logo2-long.png" id="logo"> 
+        <ul class="list-icon">
+          <li id="top-bar">
+            <a class="icons-a" href="#">
+              <img class="icon icon--2x icon-white" src="img/home.svg">
+              <span class="textIcon">Inicio</span>
+            </a>
+          </li>
       <li id="top-bar">
         <a class="icons-a" href="#">
           <img class="icon icon--2x icon-white" src="img/work.svg">
@@ -197,55 +192,57 @@ const afterLogIn = (user) => {
         <img class="icon icon--2x dropbtn" id="profilePic" src=${user.photoURL}>
           <div class="dropdown-content">
             <a href="#">Ver mi perfil</a>
-            <a href="javascript:closeSession();" id="closeSessionBT">Cerrar Sesión</a>
+            <a href="#" id="closeSessionBT" onclick="closeSession()">Cerrar Sesión</a>
           </div>
       </li>
     </ul>
   </nav>
-  </div>           
+  </div>  
+
+  <!-- Barra de abajo para mobile --->
+  <div class="align down-bar">
+      <nav class="navigation navigation--inline">
+        <ul id="classOfList">
+          <li>
+            <a class="icons-a" href="#">
+              <img class="icon icon--2x icon-white" src="img/home.svg">
+              <span class="textIcon">Inicio</span>
+            </a>
+          </li>
+         <li>
+            <a class="icons-a" href="#">
+              <img class="icon icon--2x icon-white" src="img/work.svg">
+              <span class="textIcon">Trabajo</span>
+            </a>
+          </li>
+          <li>
+           <a class="icons-a" href="#">
+              <img class="icon icon--2x icon-white" src="img/passport.svg">
+              <span class="textIcon">Visa</span>
+           </a>
+          </li>
+          <li>
+            <a class="icons-a" href="#">
+              <img class="icon icon--2x icon-white" src="img/rent.svg">
+              <span class="textIcon">Arriendos</span>
+            </a>
+          </li>
+          <li>
+            <a class="icons-a" href="#">
+              <img class="icon icon--2x icon-white" src="img/more.svg">
+              <span class="textIcon">Otros</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
   `;
-    contentPage.appendChild(buttonClose);
     authSection.innerHTML = '';
     contentPost.innerHTML = '';
+    document.getElementById('closeSessionBT').addEventListener('click', () => {
+      closeSession();
+    });
     createPost();
-    contentPage.innerHTML += `<div class="align down-bar">
-    <nav class="navigation navigation--inline">
-    <ul id="classOfList">
-        <li>
-          <a class="icons-a" href="#">
-            <img class="icon icon--2x icon-white" src="img/home.svg">
-            <span class="textIcon">Inicio</span>
-          </a>
-        </li>
-        <li>
-          <a class="icons-a" href="#">
-            <img class="icon icon--2x icon-white" src="img/work.svg">
-            <span class="textIcon">Trabajo</span>
-          </a>
-        </li>
-        <li>
-          <a class="icons-a" href="#">
-            <img class="icon icon--2x icon-white" src="img/passport.svg">
-            <span class="textIcon">Visa</span>
-          </a>
-        </li>
-        <li>
-          <a class="icons-a" href="#">
-            <img class="icon icon--2x icon-white" src="img/rent.svg">
-            <span class="textIcon">Arriendos</span>
-          </a>
-        </li>
-        <li>
-          <a class="icons-a" href="#">
-            <img class="icon icon--2x icon-white" src="img/more.svg">
-            <span class="textIcon">Otros</span>
-          </a>
-        </li>
-      </ul>
-    </nav>
-    
-    </div> 
-    `;
   } else {
     window.location.hash = '/NeedVerification';
     console.log('No está verificado');
