@@ -293,10 +293,6 @@ const createPost = () => {
   contentPost.appendChild(divCatergorieAndSent);
 
   // creamos botton de envio de post
-<<<<<<< HEAD
-=======
-
->>>>>>> b1050afb46dea2a676cd0b8154a4348379925dc9
   const saveButton = document.createElement('img');
   saveButton.src = 'img/paper-plane.png';
   saveButton.id = 'saveButton';
@@ -320,7 +316,6 @@ const createPost = () => {
 			<input type="radio" name="rating" class="super-happy" id="super-happy" value="super-happy" />
 			<img class="svg" src="img/work.svg">
 			</label>
-<<<<<<< HEAD
 
         <label for="happy">
 			<input type="radio" name="rating" class="happy" id="happy" value="happy" checked />
@@ -337,24 +332,6 @@ const createPost = () => {
 			<img class="svg" src="img/more.svg">
 			</label>
 
-=======
-
-        <label for="happy">
-			<input type="radio" name="rating" class="happy" id="happy" value="happy" checked />
-			<img class="svg" src="img/passport.svg">
-			</label>
-
-        <label for="neutral">
-			<input type="radio" name="rating" class="neutral" id="neutral" value="neutral" />
-			<img class="svg" src="img/rent.svg">
-			</label>
-
-        <label for="sad">
-			<input type="radio" name="rating" class="sad" id="sad" value="sad" />
-			<img class="svg" src="img/more.svg">
-			</label>
-
->>>>>>> b1050afb46dea2a676cd0b8154a4348379925dc9
       </form>
     </div>
   </div>
@@ -363,10 +340,6 @@ const createPost = () => {
   divCatergorieAndSent.appendChild(saveButton);
 };
 
-<<<<<<< HEAD
-
-=======
->>>>>>> b1050afb46dea2a676cd0b8154a4348379925dc9
 //Guardar Post en Firebase 
 const savePost = (textPost) => {
   const texToSave = textPost;
@@ -418,7 +391,6 @@ const sendPost = (textPost) => {
 
             editButton.id = 'Edit'
             editButton.addEventListener('click', () => {
-<<<<<<< HEAD
               document.getElementById(`divPost-${doc.id}`).innerHTML = `<textarea id='editTextArea'></textarea>`
               document.getElementById('editTextArea').value = doc.data().POST;
               const confirmButton = document.createElement('button');
@@ -428,9 +400,6 @@ const sendPost = (textPost) => {
                 console.log('Está saliendo de editar')
               });
               document.getElementById(`divPost-${doc.id}`).appendChild(confirmButton);
-=======
-              editPost(doc.id,doc.data().POST);
->>>>>>> b1050afb46dea2a676cd0b8154a4348379925dc9
             })
             divPost.appendChild(deleteButton);
             divPost.appendChild(editButton);
@@ -451,7 +420,6 @@ function deletePost(id){
 }
 
 
-<<<<<<< HEAD
 ////Editar Post
 const editPost = (id, textToSave) =>{
 
@@ -485,33 +453,4 @@ const editPost = (id, textToSave) =>{
     
 
 
-=======
-//Editar Post
-function editPost(id, texToSave){
-
-    document.getElementById('textToSave').value = texToSave;
-    const changeButton = document.getElementById('saveButton');
-    changeButton.innerHTML = 'Editar';
-
-    changeButton.addEventListener('click' ,() => {
-
-      const postRef = database.collection("post").doc(id);
-      
-      const textToSave = document.getElementById('textToSave').value;
-        console.log('Está editando')
-        return postRef.update({
-          POST: textToSave,
-        })
-        .then(function() {
-          console.log("Document successfully updated!");
-          changeButton.innerHTML = 'Save Post';
-          document.getElementById('textToSave').value = '';
-        })
-        .catch(function(error) {
-          // The document probably doesn't exist.
-          console.error("Error updating document: ", error);
-        })
-    })
-}
->>>>>>> b1050afb46dea2a676cd0b8154a4348379925dc9
 
