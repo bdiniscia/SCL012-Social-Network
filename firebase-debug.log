@@ -54,6 +54,7 @@
 [debug] [2020-01-24T15:58:25.303Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/red-social-94f04/webApps/-/config  
  
 [debug] [2020-01-24T15:58:26.984Z] <<< HTTP RESPONSE 200
+
 [info] i  hosting: Serving hosting files from: src
 [info] ✔  hosting: Local server: http://localhost:5000
 [debug] [2020-01-24T16:22:17.796Z] ----------------------------------------------------------------------
@@ -79,5 +80,6 @@
 [debug] [2020-01-24T16:22:20.340Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/red-social-94f04/webApps/-/config  
  
 [debug] [2020-01-24T16:22:21.776Z] <<< HTTP RESPONSE 200
+
 [info] i  hosting: Serving hosting files from: src
 [info] ✔  hosting: Local server: http://localhost:5000

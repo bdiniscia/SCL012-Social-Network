@@ -258,6 +258,7 @@ const sendPost = (textPost) => {
 
             const editButton = document.createElement('button');
             editButton.innerHTML = 'Editar';
+
             editButton.id = 'Edit'
             editButton.addEventListener('click', () => {
               editPost(doc.id,doc.data().POST);
