@@ -1,20 +1,5 @@
-[debug] [2020-01-24T13:31:25.114Z] ----------------------------------------------------------------------
-[debug] [2020-01-24T13:31:25.116Z] Command:       /usr/local/bin/node /usr/local/bin/firebase serve
-[debug] [2020-01-24T13:31:25.116Z] CLI Version:   7.12.1
-[debug] [2020-01-24T13:31:25.116Z] Platform:      darwin
-[debug] [2020-01-24T13:31:25.116Z] Node Version:  v10.16.3
-[debug] [2020-01-24T13:31:25.117Z] Time:          Fri Jan 24 2020 10:31:25 GMT-0300 (Chile Summer Time)
-[debug] [2020-01-24T13:31:25.117Z] ----------------------------------------------------------------------
-[debug] [2020-01-24T13:31:25.117Z] 
-[debug] [2020-01-24T13:31:25.136Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
-[debug] [2020-01-24T13:31:25.136Z] > authorizing via signed-in user
-[debug] [2020-01-24T13:31:25.136Z] [iam] checking project red-social-94f04 for permissions ["firebase.projects.get"]
-[debug] [2020-01-24T13:31:25.138Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
-[debug] [2020-01-24T13:31:25.139Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
- <request body omitted>
-[debug] [2020-01-24T13:31:25.311Z] <<< HTTP RESPONSE 200
-[debug] [2020-01-24T13:31:25.333Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/red-social-94f04:testIamPermissions  
 
+<<<<<<< HEAD
 [debug] [2020-01-24T13:31:26.562Z] <<< HTTP RESPONSE 200
 [debug] [2020-01-24T13:31:26.564Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/red-social-94f04  
  
@@ -195,3 +180,5 @@
 [debug] [2020-01-28T14:35:03.966Z] <<< HTTP RESPONSE 200
 [info] i  hosting: Serving hosting files from: src
 [info] ✔  hosting: Local server: http://localhost:5000
+=======
+>>>>>>> b1050afb46dea2a676cd0b8154a4348379925dc9
