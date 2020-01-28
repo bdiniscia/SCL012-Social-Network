@@ -36,7 +36,7 @@ const loadSignIn = () => {
   });
   // Link de olvidé contraseña
   const linkToForgot = document.createElement('span');
-  linkToForgot.innerHTML = `Olvidé mi contraseña`;
+  linkToForgot.innerHTML = 'Olvidé mi contraseña';
   linkToForgot.addEventListener('click', () => {
     generateForgot();
   });
@@ -100,6 +100,7 @@ const loadSignUp = () => {
   authSection.appendChild(toggleToSignIn);
   contentPage.innerHTML = '';
   contentPost.innerHTML = '';
+  contentMessage.innerHTML = '';
 };
 
 // <------Crear y Registrar usuario con Firebase------>
@@ -129,7 +130,7 @@ const observerAuth = () => {
       afterLogIn(user);
       // User is signed in.
       const displayName = user.displayName;
-      console.log(user);
+    //  console.log(user);
       const email = user.email;
       const emailVerified = user.emailVerified;
       const photoURL = user.photoURL;
@@ -152,16 +153,98 @@ observerAuth();
 const afterLogIn = (user) => {
   if (user.emailVerified) {
     window.location.hash = '/home';
-    const buttonClose = document.createElement('button');
-    buttonClose.innerHTML = 'Cerrar Sesión';
-    buttonClose.addEventListener('click', () => {
-      closeSession();
-    });
-    contentPage.innerHTML = `<h3>Bienvenido</h3>`;
-    contentPage.appendChild(buttonClose);
+    document.body.style.backgroundColor = "white";
+    contentPage.innerHTML = ` 
+    <div class="align">
+      <nav class="navigation navigation--inline">
+        <img src="img/Logo2-long.png" id="logo"> 
+        <ul class="list-icon">
+          <li id="top-bar">
+            <a class="icons-a" href="#">
+              <img class="icon icon--2x icon-white" src="img/home.svg">
+              <span class="textIcon">Inicio</span>
+            </a>
+          </li>
+      <li id="top-bar">
+        <a class="icons-a" href="#">
+          <img class="icon icon--2x icon-white" src="img/work.svg">
+          <span class="textIcon">Trabajo</span>
+        </a>
+      </li>
+      <li id="top-bar">
+        <a class="icons-a" href="#">
+          <img class="icon icon--2x icon-white" src="img/passport.svg">
+          <span class="textIcon">Visa</span>
+        </a>
+      </li>
+      <li id="top-bar">
+        <a class="icons-a" href="#">
+          <img class="icon icon--2x icon-white" src="img/rent.svg">
+          <span class="textIcon">Arriendos</span>
+        </a>
+      </li>
+      <li id="top-bar">
+        <a class="icons-a" href="#">
+          <img class="icon icon--2x icon-white" src="img/more.svg">
+          <span class="textIcon">Otros</span>
+        </a>
+      </li>
+      <li class="dropdown">
+        <img class="icon icon--2x dropbtn" id="profilePic" src=${user.photoURL}>
+          <div class="dropdown-content">
+            <a href="#">Ver mi perfil</a>
+            <a href="#" id="closeSessionBT">Cerrar Sesión</a>
+          </div>
+      </li>
+    </ul>
+  </nav>
+  </div>  
+
+  <!-- Barra de abajo para mobile --->
+  <div class="align down-bar">
+      <nav class="navigation navigation--inline">
+        <ul id="classOfList">
+          <li>
+            <a class="icons-a" href="#">
+              <img class="icon icon--2x icon-white" src="img/home.svg">
+              <span class="textIcon">Inicio</span>
+            </a>
+          </li>
+         <li>
+            <a class="icons-a" href="#">
+              <img class="icon icon--2x icon-white" src="img/work.svg">
+              <span class="textIcon">Trabajo</span>
+            </a>
+          </li>
+          <li>
+           <a class="icons-a" href="#">
+              <img class="icon icon--2x icon-white" src="img/passport.svg">
+              <span class="textIcon">Visa</span>
+           </a>
+          </li>
+          <li>
+            <a class="icons-a" href="#">
+              <img class="icon icon--2x icon-white" src="img/rent.svg">
+              <span class="textIcon">Arriendos</span>
+            </a>
+          </li>
+          <li>
+            <a class="icons-a" href="#">
+              <img class="icon icon--2x icon-white" src="img/more.svg">
+              <span class="textIcon">Otros</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  `;
     authSection.innerHTML = '';
     contentPost.innerHTML = '';
+    document.getElementById('closeSessionBT').addEventListener('click', () => {
+      closeSession();
+    });
     createPost();
+    sendPost();
   } else {
     window.location.hash = '/NeedVerification';
     console.log('No está verificado');
@@ -196,25 +279,67 @@ window.addEventListener('hashchange', () => {
 
 const createPost = () => {
   // aquí agregamos el componente de tipo input
-  const input = document.createElement('INPUT');
+  const input = document.createElement('textarea');
   // aquí indicamos que es un input de tipo text
-  input.type = 'text';
+  input.classList.add('createMessage');
+  input.placeholder = 'Escribe tu post aquí'
   input.id  = 'textToSave';
+
   // y por ultimo agreamos el componente creado al padre
   contentPost.appendChild(input);
+  
+  const divCatergorieAndSent = document.createElement('div');
+  divCatergorieAndSent.id = 'CatergorieAndSent';
+  contentPost.appendChild(divCatergorieAndSent);
+
   // creamos botton de envio de post
-  const saveButton = document.createElement('button');
-  saveButton.innerHTML = 'Save Post';
-  saveButton.id  = 'saveButton';
+  const saveButton = document.createElement('img');
+  saveButton.src = 'img/paper-plane.png';
+  saveButton.id = 'saveButton';
+  
   saveButton.addEventListener('click', () => {
     const textToSave = input.value;
     console.log(textToSave);
     savePost(textToSave);
     sendPost(textToSave);
   });
+  divCatergorieAndSent.innerHTML += `
+  <div class="card">
+  <div class="rating-container">
+    <div class="rating-text">
+      <p>Categoría: </p>
+    </div>
+    <div class="rating">
+      <form class="rating-form">
 
-  contentPost.appendChild(saveButton);
+        <label for="super-happy">
+			<input type="radio" name="rating" class="super-happy" id="super-happy" value="super-happy" />
+			<img class="svg" src="img/work.svg">
+			</label>
+
+        <label for="happy">
+			<input type="radio" name="rating" class="happy" id="happy" value="happy" checked />
+			<img class="svg" src="img/passport.svg">
+			</label>
+
+        <label for="neutral">
+			<input type="radio" name="rating" class="neutral" id="neutral" value="neutral" />
+			<img class="svg" src="img/rent.svg">
+			</label>
+
+        <label for="sad">
+			<input type="radio" name="rating" class="sad" id="sad" value="sad" />
+			<img class="svg" src="img/more.svg">
+			</label>
+
+      </form>
+    </div>
+  </div>
+</div>
+  `;
+  divCatergorieAndSent.appendChild(saveButton);
 };
+
 
 //Guardar Post en Firebase 
 const savePost = (textPost) => {
