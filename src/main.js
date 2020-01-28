@@ -192,7 +192,7 @@ const afterLogIn = (user) => {
         <img class="icon icon--2x dropbtn" id="profilePic" src=${user.photoURL}>
           <div class="dropdown-content">
             <a href="#">Ver mi perfil</a>
-            <a href="#" id="closeSessionBT" onclick="closeSession()">Cerrar Sesión</a>
+            <a href="#" id="closeSessionBT">Cerrar Sesión</a>
           </div>
       </li>
     </ul>
@@ -243,6 +243,7 @@ const afterLogIn = (user) => {
       closeSession();
     });
     createPost();
+    sendPost();
   } else {
     window.location.hash = '/NeedVerification';
     console.log('No está verificado');
@@ -277,22 +278,65 @@ window.addEventListener('hashchange', () => {
 
 const createPost = () => {
   // aquí agregamos el componente de tipo input
-  const input = document.createElement('INPUT');
+  const input = document.createElement('textarea');
   // aquí indicamos que es un input de tipo text
-  input.type = 'text';
+  input.classList.add('createMessage');
+  input.placeholder = 'Escribe tu post aquí'
   // y por ultimo agreamos el componente creado al padre
   contentPost.appendChild(input);
+  
+  const divCatergorieAndSent = document.createElement('div');
+  divCatergorieAndSent.id = 'CatergorieAndSent';
+  contentPost.appendChild(divCatergorieAndSent);
+
   // creamos botton de envio de post
-  const saveButton = document.createElement('button');
-  saveButton.innerHTML = 'Save Post';
+  const saveButton = document.createElement('img');
+  saveButton.src = 'img/paper-plane.png';
+  saveButton.id = 'saveButton';
+  
   saveButton.addEventListener('click', () => {
     const textToSave = input.value;
     console.log(textToSave);
     savePost(textToSave);
     sendPost(textToSave);
   });
-  contentPost.appendChild(saveButton);
+  divCatergorieAndSent.innerHTML += `
+  <div class="card">
+  <div class="rating-container">
+    <div class="rating-text">
+      <p>Categoría: </p>
+    </div>
+    <div class="rating">
+      <form class="rating-form">
+
+        <label for="super-happy">
+			<input type="radio" name="rating" class="super-happy" id="super-happy" value="super-happy" />
+			<img class="svg" src="img/work.svg">
+			</label>
+
+        <label for="happy">
+			<input type="radio" name="rating" class="happy" id="happy" value="happy" checked />
+			<img class="svg" src="img/passport.svg">
+			</label>
+
+        <label for="neutral">
+			<input type="radio" name="rating" class="neutral" id="neutral" value="neutral" />
+			<img class="svg" src="img/rent.svg">
+			</label>
+
+        <label for="sad">
+			<input type="radio" name="rating" class="sad" id="sad" value="sad" />
+			<img class="svg" src="img/more.svg">
+			</label>
+
+      </form>
+    </div>
+  </div>
+</div>
+  `;
+  divCatergorieAndSent.appendChild(saveButton);
 };
+
 
 const savePost = (textPost) => {
   const texToSave = textPost;
@@ -321,10 +365,10 @@ const sendPost = (textPost) => {
       querySnapshot.forEach((doc) => {
         console.log(doc.id, ' => ', doc.data());
         contentMessage.innerHTML += `
-            <div>
-            <div class="message"> ${doc.data().POST}</div>
-            <td> <button class="btnClear"></button>Editar</button>
-            <td> <button class="btnClear"></button>Eliminar</button>
+            <div class="messageDiv">
+            <h4 class="message"> ${doc.data().POST}</h4>
+            <td> <button class="btnClear">Editar</button>
+            <td> <button class="btnClear">Eliminar</button>
             </div>
             `;
       });
