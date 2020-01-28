@@ -199,11 +199,13 @@ const createPost = () => {
   const input = document.createElement('INPUT');
   // aquí indicamos que es un input de tipo text
   input.type = 'text';
+  input.id  = 'textToSave';
   // y por ultimo agreamos el componente creado al padre
   contentPost.appendChild(input);
   // creamos botton de envio de post
   const saveButton = document.createElement('button');
   saveButton.innerHTML = 'Save Post';
+  saveButton.id  = 'saveButton';
   saveButton.addEventListener('click', () => {
     const textToSave = input.value;
     console.log(textToSave);
@@ -214,6 +216,7 @@ const createPost = () => {
   contentPost.appendChild(saveButton);
 };
 
+//Guardar Post en Firebase 
 const savePost = (textPost) => {
   const texToSave = textPost;
   console.log("I am going to save " + texToSave + " to Firestore");
@@ -230,6 +233,7 @@ const savePost = (textPost) => {
 };
 
 
+//Traer Post
 const contentMessage = document.getElementById('contentMessage');
 
 const sendPost = (textPost) => {
@@ -254,18 +258,20 @@ const sendPost = (textPost) => {
 
             const editButton = document.createElement('button');
             editButton.innerHTML = 'Editar';
+            editButton.id = 'Edit'
             editButton.addEventListener('click', () => {
-
+              editPost(doc.id,doc.data().POST);
             })
             divPost.appendChild(deleteButton);
             divPost.appendChild(editButton);
         });
     })
-    .catch(error => {
+    .catch((error) => {
         console.log("Error getting documents: ", error);
     });
 }
 
+//Eliminar Post
 function deletePost(id){
   database.collection("post").doc(id).delete().then(function() {
     console.log("Document successfully deleted!");
@@ -273,3 +279,33 @@ function deletePost(id){
     console.error("Error removing document: ", error);
   });
 }
+
+
+//Editar Post
+function editPost(id, texToSave){
+
+    document.getElementById('textToSave').value = texToSave;
+    const changeButton = document.getElementById('saveButton');
+    changeButton.innerHTML = 'Editar';
+
+    changeButton.addEventListener('click' ,() => {
+
+      const postRef = database.collection("post").doc(id);
+      
+      const textToSave = document.getElementById('textToSave').value;
+        console.log('Está editando')
+        return postRef.update({
+          POST: textToSave,
+        })
+        .then(function() {
+          console.log("Document successfully updated!");
+          changeButton.innerHTML = 'Save Post';
+          document.getElementById('textToSave').value = '';
+        })
+        .catch(function(error) {
+          // The document probably doesn't exist.
+          console.error("Error updating document: ", error);
+        })
+    })
+}
+
