@@ -1,3 +1,4 @@
+
 body{
     background-color: #5386e4;
     font-family: 'Open Sans', sans-serif;
@@ -294,6 +295,7 @@ body{
     font-weight: bold;
 }
 
+
 .rating {
 	background-color: rgba(0, 0, 16, 0.8);
 	padding: 0;
@@ -413,4 +415,3 @@ input[class="sad"]:focus + .svg {
     }
 
   }
-

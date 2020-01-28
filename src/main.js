@@ -283,6 +283,8 @@ const createPost = () => {
   // aquí indicamos que es un input de tipo text
   input.classList.add('createMessage');
   input.placeholder = 'Escribe tu post aquí'
+  input.id  = 'textToSave';
+
   // y por ultimo agreamos el componente creado al padre
   contentPost.appendChild(input);
   
@@ -339,48 +341,97 @@ const createPost = () => {
 };
 
 
+//Guardar Post en Firebase 
 const savePost = (textPost) => {
   const texToSave = textPost;
-  console.log(`I am going to save ${texToSave} to Firestore`);
-  database.collection('post').add({
-    POST: texToSave,
+  console.log("I am going to save " + texToSave + " to Firestore");
+  database.collection("post").add({
+    POST: texToSave
   })
-    .then((docRef) => {
-      console.log('Status Saved!');
-      console.log('Document written with ID: ', docRef.id);
-    })
-    .catch((error) => {
-      console.error('Error adding document: ', error);
-    });
+  .then(docRef => {
+    console.log("Status Saved!");
+    console.log("Document written with ID: ", docRef.id);
+  })
+  .catch(error => {
+    console.error("Error adding document: ", error);
+  });
 };
 
 
+//Traer Post
 const contentMessage = document.getElementById('contentMessage');
 
 const sendPost = (textPost) => {
   const texToSave = textPost;
-  console.log(`I am going to save ${texToSave} to Firestore`);
-  database.collection('post')
-    .onSnapshot((querySnapshot) => {
+  console.log("I am going to save " + texToSave + " to Firestore");
+  database.collection("post")
+  .onSnapshot((querySnapshot) => {
       contentMessage.innerHTML = '';
       querySnapshot.forEach((doc) => {
-        console.log(doc.id, ' => ', doc.data());
-        contentMessage.innerHTML += `
-            <div class="messageDiv">
-            <h4 class="message"> ${doc.data().POST}</h4>
-            <td> <button class="btnClear">Editar</button>
-            <td> <button class="btnClear">Eliminar</button>
-            </div>
-            `;
-      });
+            const divPost = document.createElement('div');
+            contentMessage.appendChild(divPost);
+            console.log(doc.id, " => ", doc.data());
+            divPost.innerHTML +=
+            `
+            <div class="message"> ${doc.data().POST}</div>
+            `
+            const deleteButton = document.createElement('button');
+            deleteButton.innerHTML = 'Eliminar';
+            deleteButton.addEventListener('click' ,() => {
+              deletePost(doc.id);
+            })
+
+            const editButton = document.createElement('button');
+            editButton.innerHTML = 'Editar';
+
+            editButton.id = 'Edit'
+            editButton.addEventListener('click', () => {
+              editPost(doc.id,doc.data().POST);
+            })
+            divPost.appendChild(deleteButton);
+            divPost.appendChild(editButton);
+        });
     })
     .catch((error) => {
-      console.error('Error adding document: ', error);
+        console.log("Error getting documents: ", error);
     });
-};
+}
 
-// function deletePost(id){
-//   database.collection("post").doc(id).delete().then(function() {
-//       console.log
-//   }
-// }
+//Eliminar Post
+function deletePost(id){
+  database.collection("post").doc(id).delete().then(function() {
+    console.log("Document successfully deleted!");
+  }).catch(function(error) {
+    console.error("Error removing document: ", error);
+  });
+}
+
+
+//Editar Post
+function editPost(id, texToSave){
+
+    document.getElementById('textToSave').value = texToSave;
+    const changeButton = document.getElementById('saveButton');
+    changeButton.innerHTML = 'Editar';
+
+    changeButton.addEventListener('click' ,() => {
+
+      const postRef = database.collection("post").doc(id);
+      
+      const textToSave = document.getElementById('textToSave').value;
+        console.log('Está editando')
+        return postRef.update({
+          POST: textToSave,
+        })
+        .then(function() {
+          console.log("Document successfully updated!");
+          changeButton.innerHTML = 'Save Post';
+          document.getElementById('textToSave').value = '';
+        })
+        .catch(function(error) {
+          // The document probably doesn't exist.
+          console.error("Error updating document: ", error);
+        })
+    })
+}
+
