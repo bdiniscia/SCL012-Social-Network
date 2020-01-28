@@ -201,7 +201,7 @@ body{
   .createMessage {
       resize: none;
       justify-content: center;
-      width: 25em;
+      width: 30em;
       height: 6em;
       margin: 1em;
   }
@@ -296,8 +296,11 @@ body{
 
 .rating {
 	background-color: rgba(0, 0, 16, 0.8);
-	padding: 0.4rem 0.4rem 0.1rem 0.4rem;
-	border-radius: 2.2rem;
+	padding: 0;
+    border-radius: 2.2rem;
+    width: 160px;
+    height: 38px;
+    margin-top: 0.6em;
 }
 
 .svg {
@@ -354,10 +357,22 @@ input[class="sad"]:focus + .svg {
 #CatergorieAndSent {
     display: flex;
     justify-content: space-between;
-    width: 25em;
+    width: 30em;
 }
 
   @media screen and (max-width: 850px) {
+
+    .createMessage {
+        width: 18em;
+    }
+
+    #CatergorieAndSent {
+        width: 18em;
+    }
+
+    .messageDiv {
+        width: 18em;
+    }
 
     .messageDiv {
         width: 100%;
@@ -381,6 +396,11 @@ input[class="sad"]:focus + .svg {
 
     .navigation a {
         padding: 1em 0 1em 0;
+    }
+
+    .rating-text {
+        font-size: 0.8em;
+        margin-top: 0.4em;
     }
 
   }

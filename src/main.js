@@ -100,6 +100,7 @@ const loadSignUp = () => {
   authSection.appendChild(toggleToSignIn);
   contentPage.innerHTML = '';
   contentPost.innerHTML = '';
+  contentMessage.innerHTML = '';
 };
 
 // <------Crear y Registrar usuario con Firebase------>
