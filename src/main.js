@@ -346,7 +346,8 @@ const savePost = (textPost) => {
   const texToSave = textPost;
   console.log("I am going to save " + texToSave + " to Firestore");
   database.collection("post").add({
-    POST: texToSave
+    POST: texToSave,
+    postTime: new Date()
   })
   .then(docRef => {
     console.log("Status Saved!");
@@ -364,8 +365,12 @@ const contentMessage = document.getElementById('contentMessage');
 const sendPost = (textPost) => {
   const texToSave = textPost;
   console.log("I am going to save " + texToSave + " to Firestore");
-  database.collection("post")
-  .onSnapshot((querySnapshot) => {
+
+  const colletionOfPost = database.collection("post")
+  const timePost = colletionOfPost.orderBy("postTime", "desc")
+
+
+  timePost.onSnapshot((querySnapshot) => {
       contentMessage.innerHTML = '';
       querySnapshot.forEach((doc) => {
             const divPost = document.createElement('div');
@@ -373,7 +378,7 @@ const sendPost = (textPost) => {
             console.log(doc.id, " => ", doc.data());
             divPost.innerHTML +=
             `
-            <div class="message"> ${doc.data().POST}</div>
+            <textarea class="message" id='messagePosted'> ${doc.data().POST}</textarea>
             `
             const deleteButton = document.createElement('button');
             deleteButton.innerHTML = 'Eliminar';
@@ -386,7 +391,7 @@ const sendPost = (textPost) => {
 
             editButton.id = 'Edit'
             editButton.addEventListener('click', () => {
-              editPost(doc.id,doc.data().POST);
+              editPost(doc.id,document.getElementById('messagePosted').value);
             })
             divPost.appendChild(deleteButton);
             divPost.appendChild(editButton);
@@ -408,30 +413,49 @@ function deletePost(id){
 
 
 //Editar Post
-function editPost(id, texToSave){
+// const editPost = (id, textEdited) =>{
 
-    document.getElementById('textToSave').value = texToSave;
-    const changeButton = document.getElementById('saveButton');
-    changeButton.innerHTML = 'Editar';
+//     const textEdited = document.getElementById('messagePosted').value 
+//     // const changeButton = document.getElementById('saveButton');
+//     // changeButton.innerHTML = 'Editar';
 
-    changeButton.addEventListener('click' ,() => {
+//     // changeButton.addEventListener('click' ,() => {
 
-      const postRef = database.collection("post").doc(id);
+//       // const postRef = database.collection("post").doc(id);
+//       database.collection("post").doc(id).set({
+//         POST: textEdited,
+//         postTime: new Date()
+//       // })
       
-      const textToSave = document.getElementById('textToSave').value;
-        console.log('Está editando')
-        return postRef.update({
-          POST: textToSave,
-        })
-        .then(function() {
-          console.log("Document successfully updated!");
-          changeButton.innerHTML = 'Save Post';
-          document.getElementById('textToSave').value = '';
-        })
-        .catch(function(error) {
-          // The document probably doesn't exist.
-          console.error("Error updating document: ", error);
-        })
-    })
-}
+//       // const textToSave = document.getElementById('messagePosted').value;
+//         // console.log('Está editando')
+//         // return postRef.update({
+          
+//         }).then(function() {
+//           console.log("Document successfully updated!");
+        
+//           // changeButton.innerHTML = 'Save Post';
+//           // document.getElementById('textToSave').value = '';
+//         }).catch(function(error) {
+//           // The document probably doesn't exist.
+//           console.error("Error updating document: ", error);
+        
+//         })
+//     // })
+// }
 
+
+const editPost = (id, texToSave) => {
+	database.collection('post').doc(id).set({
+		POST: textToSave,
+		postTime: new Date()
+	}).then(function () {
+		console.log('document successfully updated!!');
+	})
+		.catch(function () {
+			console.log('Error update document: ', error)
+		});
+};
+
+
+document.getElementById(`confirmEdit-${doc.id}`).addEventListener('click', () => editPost(doc.id,document.getElementById('inputPost').value));
