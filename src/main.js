@@ -311,27 +311,25 @@ const createPost = () => {
     </div>
     <div class="rating">
       <form class="rating-form">
-
         <label for="super-happy">
-			<input type="radio" name="rating" class="super-happy" id="super-happy" value="super-happy" />
-			<img class="svg" src="img/work.svg">
-			</label>
+			    <input type="radio" name="rating" class="super-happy" id="super-happy" value="jobs" />
+			    <img class="svg" src="img/work.svg">
+			  </label>
 
         <label for="happy">
-			<input type="radio" name="rating" class="happy" id="happy" value="happy" checked />
-			<img class="svg" src="img/passport.svg">
-			</label>
+			    <input type="radio" name="rating" class="happy" id="happy" value="visa" checked />
+			    <img class="svg" src="img/passport.svg">
+			  </label>
 
         <label for="neutral">
-			<input type="radio" name="rating" class="neutral" id="neutral" value="neutral" />
-			<img class="svg" src="img/rent.svg">
-			</label>
+			    <input type="radio" name="rating" class="neutral" id="neutral" value="rent" />
+			    <img class="svg" src="img/rent.svg">
+			  </label>
 
         <label for="sad">
-			<input type="radio" name="rating" class="sad" id="sad" value="sad" />
-			<img class="svg" src="img/more.svg">
-			</label>
-
+			    <input type="radio" name="rating" class="sad" id="sad" value="others" />
+			    <img class="svg" src="img/more.svg">
+			  </label>
       </form>
     </div>
   </div>
@@ -369,6 +367,7 @@ const sendPost = (textPost) => {
       contentMessage.innerHTML = '';
       querySnapshot.forEach((doc) => {
         const divPost = document.createElement('div');
+        divPost.classList.add('divPost');
         contentMessage.appendChild(divPost);
         console.log(doc.id, ' => ', doc.data());
         divPost.innerHTML
@@ -377,6 +376,7 @@ const sendPost = (textPost) => {
             `;
         const deleteButton = document.createElement('button');
         deleteButton.innerHTML = 'Eliminar';
+        deleteButton.classList.add('deleteButton');
         deleteButton.addEventListener('click', () => {
           deletePost(doc.id);
         });

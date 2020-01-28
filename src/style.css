@@ -262,13 +262,15 @@ body{
       align-items: center;
 }
 
-.messageDiv {
+.divPost {
     display: flex;
     justify-content: center;
     background-color: #f1f1f1;
     margin: 1em;
     width: 30em;
     font-family: 'Open Sans', sans-serif;
+    padding: 1em 0.5em 1em 0.5em;
+    border-radius: 0.5em;
 }
 
 
@@ -372,12 +374,8 @@ input[class="sad"]:focus + .svg {
         width: 18em;
     }
 
-    .messageDiv {
+    .divPost {
         width: 18em;
-    }
-
-    .messageDiv {
-        width: 100%;
     }
 
     #contentPost {
