@@ -26,6 +26,31 @@ h2 {
   text-align: left;
 }
 
+.buttonVerification {
+    display:flex;
+    padding: 0.5em 0 0.5em 0;
+    margin-bottom: 2em; 
+    background: rgba(12, 80, 166, 1);
+    font-size: 11px;
+    box-sizing: border-box; 
+    width: 22em;
+    height: 3em;
+    outline: 0;
+    text-transform: uppercase;
+    cursor: pointer;
+    color: #FFFFFF;
+    border:none;
+    border-radius: 5px;
+    justify-content: center;
+    align-items: center;
+}
+
+#verificationText {
+    color: #555555;
+    display: flex;
+    align-self: center;
+}
+
 .formLog {
   align-content: space-around;
   display:flex;
@@ -88,7 +113,7 @@ h2 {
 }
 #linkForgot{
   color: #FFFFFF;
-  margin-bottom: 1em;
+  margin-bottom: 3em;
   text-decoration: underline;
   cursor:pointer;
 }
@@ -325,6 +350,23 @@ h2 {
     margin-top: 2em;
     flex-direction: column;
     align-items: center;
+}
+
+#divVerification {
+    display: flex;
+    flex-direction: column;
+    background-color: #f1f1f1;
+    width: 22em;
+    align-items: center;
+    justify-content: center;
+    margin-top: 6em;
+    border-radius: 10px;
+    padding: 1em;
+}
+
+#contentPage {
+    display: flex;
+    justify-content: center;
 }
 
   #contentMessage {

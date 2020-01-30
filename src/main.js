@@ -268,17 +268,21 @@ const afterLogIn = (user) => {
   } else {
     window.location.hash = '/NeedVerification';
     console.log('No está verificado');
+    const divVerificaction = document.createElement('div');
+    divVerificaction.id = 'divVerification';
+    contentPage.appendChild(divVerificaction);
     const buttonClose = document.createElement('button');
     buttonClose.innerHTML = 'Cerrar Sesión';
+    buttonClose.classList.add('buttonVerification');
     buttonClose.addEventListener('click', () => {
       closeSession();
       document.body.style.backgroundColor = 'rgb(82, 115, 211)';
     });
-    contentPage.innerHTML = '<p>Verifica tu mail para poder entrar a la aplicación</p>';
-    contentPage.appendChild(buttonClose);
+    divVerificaction.innerHTML = '<h3 id="verificationText">Verifica tu mail para poder entrar a la aplicación. Revisa en tu buzón de entrada o en el de spam. </h3>';
+    divVerificaction.appendChild(buttonClose);
     authSection.innerHTML = '';
   }
-};
+}; 
 
 
 // <-----El Routing----->
