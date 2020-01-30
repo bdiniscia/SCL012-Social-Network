@@ -11,6 +11,7 @@ myFunction();
 const authSection = document.getElementById('authSection'); // Sección de registro
 const contentPage = document.getElementById('contentPage'); // Sección de parte de arriba del home
 const contentPost = document.getElementById('contentPost'); // Sección de los posts
+const mainContent = document.getElementById('mainContent'); // Sección que contiene ContentPost y ContentMessage
 
 
 // <------Función que carga el Sign In------>
@@ -19,31 +20,39 @@ const loadSignIn = () => {
   // Botón de entrar
   const sbSingIn = document.createElement('button');
   sbSingIn.innerText = 'Entrar';
+  sbSingIn.classList.add("buttonLog");
   sbSingIn.addEventListener('click', () => {
     sendButtonLogIn();
   });
   // Botón de ya tengo cuenta
   const toggleToSignUp = document.createElement('button');
   toggleToSignUp.innerHTML = 'No tengo cuenta';
+  toggleToSignUp.classList.add("buttonLog");
+  toggleToSignUp.setAttribute("id", "buttonCreateAccount");
   toggleToSignUp.addEventListener('click', () => {
     loadSignUp();
   });
   // Botón de entrar con Google
   const buttonGoogle = document.createElement('button');
   buttonGoogle.innerHTML = 'Ingresa con Google';
+  buttonGoogle.classList.add("buttonLog");
   buttonGoogle.addEventListener('click', () => {
     signUpGoogle();
   });
   // Link de olvidé contraseña
   const linkToForgot = document.createElement('span');
   linkToForgot.innerHTML = 'Olvidé mi contraseña';
+  linkToForgot.setAttribute("id", "linkForgot");
   linkToForgot.addEventListener('click', () => {
     generateForgot();
   });
   authSection.innerHTML = `
-    <h1>Log in</h1>
-    <input type="email" id="emailLogIn" placeholder="Email">
-    <input type="password" id="passwordLogIn" placeholder="Contraseña">
+  <img id="imgLogo" src="./images/Logo2-white.png" alt="imagen no encontrada" height="100">
+    <form class="formLog"> 
+      <h2>Inicia Sesión</h2>
+      <input class="inputLog" type="email" id="emailLogIn" placeholder="Email">
+      <input class="inputLog" type="password" id="passwordLogIn" placeholder="Contraseña">
+    </form>  
   `;
   authSection.appendChild(sbSingIn);
   authSection.appendChild(linkToForgot);
@@ -58,8 +67,10 @@ const generateForgot = () => {
   window.location.hash = '/forgot';
   const inputEmail = document.createElement('input');
   inputEmail.placeholder = 'Tu email';
+  inputEmail.classList.add("inputLog");
   const buttonForgot = document.createElement('button');
   buttonForgot.innerHTML = 'Recuperar contraseña';
+  buttonForgot.classList.add("buttonLog");
   buttonForgot.addEventListener('click', () => {
     forgotPassword(inputEmail.value);
   });
@@ -74,26 +85,35 @@ const generateForgot = () => {
 const loadSignUp = () => {
   window.location.hash = '/SignUp';
   const sb = document.createElement('button');
+  sb.classList.add('buttonLog');
   sb.innerText = 'Registrarme';
   sb.addEventListener('click', () => {
     sendButton();
   });
   const toggleToSignIn = document.createElement('button');
   toggleToSignIn.innerHTML = 'Ya tengo cuenta';
+  toggleToSignIn.setAttribute("id", "buttonSignIn");
+  toggleToSignIn.classList.add('buttonLog');
   toggleToSignIn.addEventListener('click', () => {
     loadSignIn();
   });
   const buttonGoogle = document.createElement('button');
   buttonGoogle.innerHTML = 'Ingresa con Google';
+  buttonGoogle.setAttribute("id", "buttonGoogle");
+  buttonGoogle.classList.add('buttonLog');
   buttonGoogle.addEventListener('click', () => {
     signUpGoogle();
   });
 
   authSection.innerHTML = `
-      <h1>Sign up</h1>
-      <input type="text" id="name" placeholder="Nombre">
-      <input type="email" id="email" placeholder="Email">
-      <input type="password" id="password" placeholder="Contraseña">
+    <img id="imgLogo" src="./images/Logo2-white.png" alt="imagen no encontrada" height="100">
+       <form class="formLog"> 
+          <h2>Crea tu cuenta</h2>
+          <input class="inputLog" type="name" id="name" placeholder="Nombre">
+          <input class="inputLog" type="email" id="email" placeholder="Email">
+          <input class="inputLog" type="password" id="password" placeholder="Contraseña">
+       </form>
+    
   `;
   authSection.appendChild(sb);
   authSection.appendChild(buttonGoogle);
@@ -111,6 +131,7 @@ const sendButton = () => {
 
   singUpNewUser(email, password, name);
 };
+
 
 
 // <------Loggear usuario con Firebase------>
@@ -153,7 +174,7 @@ observerAuth();
 const afterLogIn = (user) => {
   if (user.emailVerified) {
     window.location.hash = '/home';
-    document.body.style.backgroundColor = "white";
+    document.body.style.backgroundColor = 'white';
     contentPage.innerHTML = ` 
     <div class="align">
       <nav class="navigation navigation--inline">
@@ -242,22 +263,28 @@ const afterLogIn = (user) => {
     contentPost.innerHTML = '';
     document.getElementById('closeSessionBT').addEventListener('click', () => {
       closeSession();
+      document.body.style.backgroundColor = 'rgb(82, 115, 211)';
     });
     createPost();
     sendPost();
   } else {
-    window.location.hash = '/NeedVerification';
     console.log('No está verificado');
+    const divVerificaction = document.createElement('div');
+    divVerificaction.id = 'divVerification';
+    contentPage.appendChild(divVerificaction);
     const buttonClose = document.createElement('button');
     buttonClose.innerHTML = 'Cerrar Sesión';
+    buttonClose.classList.add('buttonVerification');
     buttonClose.addEventListener('click', () => {
       closeSession();
+      document.body.style.backgroundColor = 'rgb(82, 115, 211)';
     });
-    contentPage.innerHTML = '<p>Verifica tu mail para poder entrar a la aplicación</p>';
-    contentPage.appendChild(buttonClose);
+    divVerificaction.innerHTML = '<h3 id="verificationText">Verifica tu mail para poder entrar a la aplicación. Revisa en tu buzón de entrada o en el de spam. </h3>';
+    divVerificaction.appendChild(buttonClose);
     authSection.innerHTML = '';
+    mainContent.innerHTML = '';
   }
-};
+}; 
 
 
 // <-----El Routing----->
@@ -266,7 +293,7 @@ window.addEventListener('hashchange', () => {
     loadSignIn();
   } else if (window.location.hash === '#/SignUp') {
     loadSignUp();
-  } else if (window.location.hash === '#/home' || window.location.hash === '#/NeedVerification') {
+  } else if (window.location.hash === '#/home') {
     const actualUser = firebase.auth().currentUser;
     afterLogIn(actualUser);
   } else if (window.location.hash === '#/forgot') {
@@ -282,7 +309,11 @@ const createPost = () => {
   const input = document.createElement('textarea');
   // aquí indicamos que es un input de tipo text
   input.classList.add('createMessage');
+<<<<<<< HEAD
   input.placeholder = 'Escribe tu post aquí'
+=======
+  input.placeholder = 'Escribe tu post aquí';
+>>>>>>> 13f02854e186c502b15f88bc75853d7bbfbd6ad2
   input.id = 'textToSave';
 
   // y por ultimo agreamos el componente creado al padre
@@ -302,6 +333,7 @@ const createPost = () => {
     console.log(textToSave);
     savePost(textToSave);
     sendPost(textToSave);
+    input.value = '';
   });
   divCatergorieAndSent.innerHTML += `
   <div class="card">
@@ -311,27 +343,25 @@ const createPost = () => {
     </div>
     <div class="rating">
       <form class="rating-form">
-
         <label for="super-happy">
-			<input type="radio" name="rating" class="super-happy" id="super-happy" value="super-happy" />
-			<img class="svg" src="img/work.svg">
-			</label>
+			    <input type="radio" name="rating" class="super-happy" id="super-happy" value="jobs" />
+			    <img class="svg" src="img/work.svg">
+			  </label>
 
         <label for="happy">
-			<input type="radio" name="rating" class="happy" id="happy" value="happy" checked />
-			<img class="svg" src="img/passport.svg">
-			</label>
+			    <input type="radio" name="rating" class="happy" id="happy" value="visa" checked />
+			    <img class="svg" src="img/passport.svg">
+			  </label>
 
         <label for="neutral">
-			<input type="radio" name="rating" class="neutral" id="neutral" value="neutral" />
-			<img class="svg" src="img/rent.svg">
-			</label>
+			    <input type="radio" name="rating" class="neutral" id="neutral" value="rent" />
+			    <img class="svg" src="img/rent.svg">
+			  </label>
 
         <label for="sad">
-			<input type="radio" name="rating" class="sad" id="sad" value="sad" />
-			<img class="svg" src="img/more.svg">
-			</label>
-
+			    <input type="radio" name="rating" class="sad" id="sad" value="others" />
+			    <img class="svg" src="img/more.svg">
+			  </label>
       </form>
     </div>
   </div>
@@ -340,8 +370,9 @@ const createPost = () => {
   divCatergorieAndSent.appendChild(saveButton);
 };
 
-//Guardar Post en Firebase 
+// Guardar Post en Firebase
 const savePost = (textPost) => {
+<<<<<<< HEAD
   const texToSave = textPost;
   console.log("I am going to save " + texToSave + " to Firestore");
   database.collection("post").add({
@@ -355,25 +386,46 @@ const savePost = (textPost) => {
     })
     .catch(error => {
       console.error("Error adding document: ", error);
+=======
+  console.log(`I am going to save ${textPost} to Firestore`);
+  database.collection('post').add({
+    POST: textPost,
+    postTime: new Date(),
+  })
+    .then((docRef) => {
+      console.log('Status Saved!');
+      console.log('Document written with ID: ', docRef.id);
+    })
+    .catch((error) => {
+      console.error('Error adding document: ', error);
+>>>>>>> 13f02854e186c502b15f88bc75853d7bbfbd6ad2
     });
 };
 
 
-//Traer Post
+// Traer Post
 const contentMessage = document.getElementById('contentMessage');
 
 const sendPost = (textPost) => {
+<<<<<<< HEAD
   const texToSave = textPost;
   console.log("I am going to save " + texToSave + " to Firestore");
 
   const colletionOfPost = database.collection("post")
   const postsOrdered = colletionOfPost.orderBy("postTime", "desc")
+=======
+  console.log(`I am going to save ${textPost} to Firestore`);
+
+  const colletionOfPost = database.collection('post');
+  const postsOrdered = colletionOfPost.orderBy('postTime', 'desc');
+>>>>>>> 13f02854e186c502b15f88bc75853d7bbfbd6ad2
 
 
   postsOrdered.onSnapshot((querySnapshot) => {
     contentMessage.innerHTML = '';
     querySnapshot.forEach((doc) => {
       const divPost = document.createElement('div');
+<<<<<<< HEAD
       divPost.id = `divPost-${doc.id}`
       contentMessage.appendChild(divPost);
       console.log(doc.id, " => ", doc.data());
@@ -515,3 +567,94 @@ const postLike = (id) =>{
 }
 
 
+=======
+      divPost.classList.add('divPost');
+      divPost.id = `divPost-${doc.id}`;
+      contentMessage.appendChild(divPost);
+      console.log(doc.id, ' => ', doc.data());
+
+      divPost.innerHTML += `
+            <p class="message" id='messagePosted'> ${doc.data().POST}</p>
+            `;
+
+      const divIcons = document.createElement('div');
+      divIcons.classList.add('divIcons');
+      divPost.appendChild(divIcons);
+
+      const deleteButton = document.createElement('img');
+      deleteButton.classList.add('iconsDivPost');
+      deleteButton.src = 'img/close.svg';
+      deleteButton.addEventListener('click', () => {
+        deletePost(doc.id);
+      });
+
+      const editButton = document.createElement('img');
+      editButton.src = 'img/edit.svg';
+      editButton.classList.add('iconsDivPost');
+      editButton.id = 'Edit';
+
+      editButton.addEventListener('click', () => {
+        document.getElementById(`divPost-${doc.id}`).innerHTML = 
+        `<textarea id="editTextArea" class="editTextArea"></textarea>`;
+        document.getElementById('editTextArea').value = doc.data().POST;
+        const confirmButton = document.createElement('img');
+        confirmButton.src = 'img/tick.svg';
+        confirmButton.classList.add('confirmButton');
+
+        confirmButton.addEventListener('click', () => {
+          editPost(doc.id, document.getElementById('editTextArea').value);
+          console.log('Está saliendo de editar');
+        });
+
+        document.getElementById(`divPost-${doc.id}`).appendChild(confirmButton);
+      });
+      divIcons.appendChild(deleteButton);
+      divIcons.appendChild(editButton);
+    })
+      .catch((error) => {
+        console.log('Error getting documents: ', error);
+      });
+  });
+};
+
+// Eliminar Post
+function deletePost(id) {
+  database.collection('post').doc(id).delete().then(() => {
+    console.log('Document successfully deleted!');
+  })
+    .catch((error) => {
+      console.error('Error getting documents: ', error);
+    });
+}
+
+
+// //Editar Post
+const editPost = (id, textToSave) => {
+  const postRef = database.collection('post').doc(id);
+  console.log('Está editando');
+  return postRef.update({
+    POST: textToSave,
+    postTime: new Date(),
+  }).then(() => {
+    console.log('Document successfully updated!');
+  }).catch((error) => {
+    console.error('Error updating document: ', error);
+  });
+};
+
+
+// <-------------Función editar post-------------->
+//  let editPost = (id, textToSave) => {
+//   console.log('Está entrando a editar')
+
+//       database.collection('post').doc(id).set({
+//         POST: textToSave,
+//         postTime: new Date()
+//       }).then(function () {
+//         console.log('document successfully updated!!');
+//       })
+//         .catch(function () {
+//           console.log('Error update document: ', error)
+//         });
+//     }
+>>>>>>> 13f02854e186c502b15f88bc75853d7bbfbd6ad2

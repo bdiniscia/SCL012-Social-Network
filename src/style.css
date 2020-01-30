@@ -1,33 +1,129 @@
-
 body{
-    background-color: #5386e4;
+    background-color: rgb(82, 115, 211);
     font-family: 'Open Sans', sans-serif;
     margin: 0;
     min-height: 100%;
 }
 
-#authSection{
-    display:flex;
-    justify-content: center;
-    align-content: center;
+
+#authSection {
+  display:flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
 }
 
+#imgLogo {
+  margin-top: 2em;
+}
+    
+h2 {
+  color: #FFFFFF;
+  font-weight: 300;
+  font-size: 18px;
+  text-align: left;
+}
 
-.logForm{
+.buttonVerification {
     display:flex;
-    margin:0 auto;
-    flex-direction: column;
-    width: 233px;
-    height: 40px;
-    background-color: aliceblue;
+    padding: 0.5em 0 0.5em 0;
+    margin-bottom: 2em; 
+    background: rgba(12, 80, 166, 1);
+    font-size: 11px;
+    box-sizing: border-box; 
+    width: 22em;
+    height: 3em;
+    outline: 0;
+    text-transform: uppercase;
+    cursor: pointer;
+    color: #FFFFFF;
+    border:none;
+    border-radius: 5px;
+    justify-content: center;
+    align-items: center;
+}
+
+#verificationText {
+    color: #555555;
+    display: flex;
+    align-self: center;
+}
+
+.formLog {
+  align-content: space-around;
+  display:flex;
+  flex-direction: column;
+  align-content:center; 
+  justify-content: center;
+  align-items: center;
+  max-width: 20em;
+  padding-top: 2.3em;
+  padding-bottom: 1.3em;
+} 
+
+.inputLog {
+  outline: 0;
+  background: rgba(201, 224, 254, 1);      
+  box-sizing: border-box;
+  border: 0;
+  margin: 0 0 20px;
+  padding: 15px;
+  border-radius: 5px;
+  font-size: 13px;
+  width: 18.5em;
+}
+
+.buttonLog {
+  display:flex;
+  padding: 0.5em 0 0.5em 0;
+  margin-bottom: 2em; 
+  background: rgba(12, 80, 166, 1);
+  font-size: 11px;
+  box-sizing: border-box; 
+  width: 22em;
+  height: 3em;
+  outline: 0;
+  text-transform: uppercase;
+  cursor: pointer;
+  color: #FFFFFF;
+  border:none;
+  border-radius: 5px;
+  justify-content: center;
+  align-items: center;
+} 
+
+#buttonSignIn { 
+  background:transparent;
+  border: 2px solid rgb(159, 170, 247);
+}
+
+#buttonCreateAccount {
+  background:transparent;
+  border: 2px solid rgb(159, 170, 247);
+}
+
+@media screen and (min-width:960px){
+
+  .buttonLog, #buttonSignIn, #buttonCreateAccount{
+
+    max-width: 23em;
+  }
+}
+#linkForgot{
+  color: #FFFFFF;
+  margin-bottom: 3em;
+  text-decoration: underline;
+  cursor:pointer;
 }
 
 #logo {
-    width: 18em;
-    display: inline;
-    vertical-align: middle;
-    padding-top: 8px;
-    padding-left: 10px;
+  width: 18em;
+  display: inline;
+  vertical-align: middle;
+  padding-top: 8px;
+  padding-left: 10px;
 }
 
 #profilePic {
@@ -60,6 +156,7 @@ body{
     justify-content: center;
     align-items: center;
     display: flex;
+    width: 100%;
   }
   
   
@@ -205,6 +302,7 @@ body{
       width: 30em;
       height: 6em;
       margin: 1em;
+      padding: 1em;
   }
 
   
@@ -255,6 +353,23 @@ body{
     align-items: center;
 }
 
+#divVerification {
+    display: flex;
+    flex-direction: column;
+    background-color: #f1f1f1;
+    width: 22em;
+    align-items: center;
+    justify-content: center;
+    margin-top: 6em;
+    border-radius: 10px;
+    padding: 1em;
+}
+
+#contentPage {
+    display: flex;
+    justify-content: center;
+}
+
   #contentMessage {
       display: flex;
       justify-content: center;
@@ -262,15 +377,20 @@ body{
       align-items: center;
 }
 
-.messageDiv {
+.divPost {
     display: flex;
-    justify-content: center;
+    flex-direction: column-reverse;
     background-color: #f1f1f1;
     margin: 1em;
     width: 30em;
     font-family: 'Open Sans', sans-serif;
+    padding: 1em 1.5em 1em 1.5em;
+    border-radius: 0.5em;
 }
 
+.divIcons {
+    align-self: flex-end;
+}
 
 .card {
 	display: -webkit-box;
@@ -311,8 +431,6 @@ body{
 	width: 1.3em;
 	margin: 0.5em;
 }
-
-
 
 #radios label {
 	position: relative;
@@ -362,6 +480,36 @@ input[class="sad"]:focus + .svg {
     width: 30em;
 }
 
+.iconsDivPost {
+    width: 0.7em;
+    filter: invert(55%) sepia(0%) saturate(69%) hue-rotate(161deg) brightness(91%) contrast(83%);
+    margin: 0 0.3em 0 0.3em;
+    align-self: baseline;
+}
+
+.iconsDivPost:hover {
+    filter: invert(45%) sepia(89%) saturate(804%) hue-rotate(197deg) brightness(93%) contrast(92%);
+}
+
+.message {
+    margin: 0.3em 0em 1em 0.2em;
+}
+
+.confirmButton {
+    width: 0.7em;
+    width: 1em;
+    align-self: flex-end;
+    filter: invert(55%) sepia(0%) saturate(69%) hue-rotate(161deg) brightness(91%) contrast(83%);
+}
+
+.confirmButton:hover {
+    filter: invert(45%) sepia(89%) saturate(804%) hue-rotate(197deg) brightness(93%) contrast(92%);
+}
+
+.editTextArea {
+    resize: none;
+}
+
   @media screen and (max-width: 850px) {
 
     .createMessage {
@@ -372,12 +520,8 @@ input[class="sad"]:focus + .svg {
         width: 18em;
     }
 
-    .messageDiv {
+    .divPost {
         width: 18em;
-    }
-
-    .messageDiv {
-        width: 100%;
     }
 
     #contentPost {
