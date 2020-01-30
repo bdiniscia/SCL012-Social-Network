@@ -19,31 +19,39 @@ const loadSignIn = () => {
   // Botón de entrar
   const sbSingIn = document.createElement('button');
   sbSingIn.innerText = 'Entrar';
+  sbSingIn.classList.add('button');
   sbSingIn.addEventListener('click', () => {
     sendButtonLogIn();
   });
   // Botón de ya tengo cuenta
   const toggleToSignUp = document.createElement('button');
   toggleToSignUp.innerHTML = 'No tengo cuenta';
+  toggleToSignUp.classList.add('button');
+  toggleToSignUp.setAttribute('id', 'buttonCreateAccount');
   toggleToSignUp.addEventListener('click', () => {
     loadSignUp();
   });
   // Botón de entrar con Google
   const buttonGoogle = document.createElement('button');
   buttonGoogle.innerHTML = 'Ingresa con Google';
+  buttonGoogle.classList.add('button');
   buttonGoogle.addEventListener('click', () => {
     signUpGoogle();
   });
   // Link de olvidé contraseña
   const linkToForgot = document.createElement('span');
   linkToForgot.innerHTML = 'Olvidé mi contraseña';
+  linkToForgot.setAttribute('id', 'linkForgot');
   linkToForgot.addEventListener('click', () => {
     generateForgot();
   });
   authSection.innerHTML = `
-    <h1>Log in</h1>
-    <input type="email" id="emailLogIn" placeholder="Email">
-    <input type="password" id="passwordLogIn" placeholder="Contraseña">
+  <img src="./images/Logo2-white.png" alt="imagen no encontrada" height="100">
+    <form> 
+      <h2>Inicia Sesión</h2>
+      <input type="email" id="emailLogIn" placeholder="Email">
+      <input type="password" id="passwordLogIn" placeholder="Contraseña">
+    </form>  
   `;
   authSection.appendChild(sbSingIn);
   authSection.appendChild(linkToForgot);
@@ -74,26 +82,39 @@ const generateForgot = () => {
 const loadSignUp = () => {
   window.location.hash = '/SignUp';
   const sb = document.createElement('button');
+  sb.classList.add('button');
   sb.innerText = 'Registrarme';
   sb.addEventListener('click', () => {
     sendButton();
   });
   const toggleToSignIn = document.createElement('button');
   toggleToSignIn.innerHTML = 'Ya tengo cuenta';
+  toggleToSignIn.setAttribute('id', 'buttonSignIn');
+  toggleToSignIn.classList.add('button');
   toggleToSignIn.addEventListener('click', () => {
     loadSignIn();
   });
   const buttonGoogle = document.createElement('button');
   buttonGoogle.innerHTML = 'Ingresa con Google';
+  buttonGoogle.setAttribute('id', 'buttonGoogle');
+  buttonGoogle.classList.add('button');
   buttonGoogle.addEventListener('click', () => {
     signUpGoogle();
   });
 
   authSection.innerHTML = `
-      <h1>Sign up</h1>
-      <input type="text" id="name" placeholder="Nombre">
-      <input type="email" id="email" placeholder="Email">
-      <input type="password" id="password" placeholder="Contraseña">
+    <div class="containerLog">
+      <div class="registerForm">
+      <img src="./images/Logo2-white.png" alt="imagen no encontrada" height="100">
+        <form> 
+          <h2>Crea tu cuenta</h2>
+          <input type="name" id="nameLogIn" placeholder="Nombre">
+          <input type="email" id="email" placeholder="Email">
+          <input type="password" id="password" placeholder="Contraseña">
+          <input type="password" id="passwordConfirm" placeholder="Repetir contraseña">
+        </form>
+      </div>
+    </div>   
   `;
   authSection.appendChild(sb);
   authSection.appendChild(buttonGoogle);
@@ -302,6 +323,7 @@ const createPost = () => {
     console.log(textToSave);
     savePost(textToSave);
     sendPost(textToSave);
+    input.value = '';
   });
   divCatergorieAndSent.innerHTML += `
   <div class="card">
@@ -338,13 +360,12 @@ const createPost = () => {
   divCatergorieAndSent.appendChild(saveButton);
 };
 
-
 // Guardar Post en Firebase
 const savePost = (textPost) => {
-  const texToSave = textPost;
-  console.log(`I am going to save ${  texToSave  } to Firestore`);
+  console.log(`I am going to save ${textPost} to Firestore`);
   database.collection('post').add({
-    POST: texToSave,
+    POST: textPost,
+    postTime: new Date(),
   })
     .then((docRef) => {
       console.log('Status Saved!');
@@ -360,41 +381,63 @@ const savePost = (textPost) => {
 const contentMessage = document.getElementById('contentMessage');
 
 const sendPost = (textPost) => {
-  const texToSave = textPost;
-  console.log(`I am going to save ${  texToSave  } to Firestore`);
-  database.collection('post')
-    .onSnapshot((querySnapshot) => {
-      contentMessage.innerHTML = '';
-      querySnapshot.forEach((doc) => {
-        const divPost = document.createElement('div');
-        divPost.classList.add('divPost');
-        contentMessage.appendChild(divPost);
-        console.log(doc.id, ' => ', doc.data());
-        divPost.innerHTML
-            += `
-            <div class="message"> ${doc.data().POST}</div>
+  console.log(`I am going to save ${textPost} to Firestore`);
+
+  const colletionOfPost = database.collection('post');
+  const postsOrdered = colletionOfPost.orderBy('postTime', 'desc');
+
+
+  postsOrdered.onSnapshot((querySnapshot) => {
+    contentMessage.innerHTML = '';
+    querySnapshot.forEach((doc) => {
+      const divPost = document.createElement('div');
+      divPost.classList.add('divPost');
+      divPost.id = `divPost-${doc.id}`;
+      contentMessage.appendChild(divPost);
+      console.log(doc.id, ' => ', doc.data());
+
+      divPost.innerHTML += `
+            <p class="message" id='messagePosted'> ${doc.data().POST}</p>
             `;
-        const deleteButton = document.createElement('button');
-        deleteButton.innerHTML = 'Eliminar';
-        deleteButton.classList.add('deleteButton');
-        deleteButton.addEventListener('click', () => {
-          deletePost(doc.id);
-        });
 
-        const editButton = document.createElement('button');
-        editButton.innerHTML = 'Editar';
+      const divIcons = document.createElement('div');
+      divIcons.classList.add('divIcons');
+      divPost.appendChild(divIcons);
 
-        editButton.id = 'Edit';
-        editButton.addEventListener('click', () => {
-          editPost(doc.id, doc.data().POST);
-        });
-        divPost.appendChild(deleteButton);
-        divPost.appendChild(editButton);
+      const deleteButton = document.createElement('img');
+      deleteButton.classList.add('iconsDivPost');
+      deleteButton.src = 'img/close.svg';
+      deleteButton.addEventListener('click', () => {
+        deletePost(doc.id);
       });
+
+      const editButton = document.createElement('img');
+      editButton.src = 'img/edit.svg';
+      editButton.classList.add('iconsDivPost');
+      editButton.id = 'Edit';
+
+      editButton.addEventListener('click', () => {
+        document.getElementById(`divPost-${doc.id}`).innerHTML = 
+        `<textarea id="editTextArea" class="editTextArea"></textarea>`;
+        document.getElementById('editTextArea').value = doc.data().POST;
+        const confirmButton = document.createElement('img');
+        confirmButton.src = 'img/tick.svg';
+        confirmButton.classList.add('confirmButton');
+
+        confirmButton.addEventListener('click', () => {
+          editPost(doc.id, document.getElementById('editTextArea').value);
+          console.log('Está saliendo de editar');
+        });
+
+        document.getElementById(`divPost-${doc.id}`).appendChild(confirmButton);
+      });
+      divIcons.appendChild(deleteButton);
+      divIcons.appendChild(editButton);
     })
-    .catch((error) => {
-      console.log('Error getting documents: ', error);
-    });
+      .catch((error) => {
+        console.log('Error getting documents: ', error);
+      });
+  });
 };
 
 // Eliminar Post
@@ -403,33 +446,37 @@ function deletePost(id) {
     console.log('Document successfully deleted!');
   })
     .catch((error) => {
-      console.error('Error removing document: ', error);
+      console.error('Error getting documents: ', error);
     });
 }
 
 
-// Editar Post
-function editPost(id, texToSave) {
-  document.getElementById('textToSave').value = texToSave;
-  const changeButton = document.getElementById('saveButton');
-  changeButton.innerHTML = 'Editar';
-
-  changeButton.addEventListener('click', () => {
-    const postRef = database.collection('post').doc(id);
-
-    const textToSave = document.getElementById('textToSave').value;
-    console.log('Está editando');
-    return postRef.update({
-      POST: textToSave,
-    })
-      .then(() => {
-        console.log('Document successfully updated!');
-        changeButton.innerHTML = 'Save Post';
-        document.getElementById('textToSave').value = '';
-      })
-      .catch((error) => {
-        // The document probably doesn't exist.
-        console.error('Error updating document: ', error);
-      });
+// //Editar Post
+const editPost = (id, textToSave) => {
+  const postRef = database.collection('post').doc(id);
+  console.log('Está editando');
+  return postRef.update({
+    POST: textToSave,
+    postTime: new Date(),
+  }).then(() => {
+    console.log('Document successfully updated!');
+  }).catch((error) => {
+    console.error('Error updating document: ', error);
   });
-}
+};
+
+
+// <-------------Función editar post-------------->
+//  let editPost = (id, textToSave) => {
+//   console.log('Está entrando a editar')
+
+//       database.collection('post').doc(id).set({
+//         POST: textToSave,
+//         postTime: new Date()
+//       }).then(function () {
+//         console.log('document successfully updated!!');
+//       })
+//         .catch(function () {
+//           console.log('Error update document: ', error)
+//         });
+//     }

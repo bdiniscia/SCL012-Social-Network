@@ -1,25 +1,115 @@
-
 body{
-    background-color: #5386e4;
-    font-family: 'Open Sans', sans-serif;
+    background-color: rgb(82, 115, 211);
+    font-family: 'Roboto', sans-serif;
     margin: 0;
     min-height: 100%;
 }
 
-#authSection{
-    display:flex;
-    justify-content: center;
-    align-content: center;
-}
+  @media screen and (max-width: 560px) { 
+
+    #authSection {
+        display:flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        justify-content: center;
+        align-content: center;
+        align-items: center;
+    }
+
+    img {
+        margin-top: 0.5em;
+    }
+    
+    .registerForm {
+         display:flex;
+         flex-direction: column;
+         justify-content: center;
+         align-items: center;
+         align-content: center;
+    }
+
+    h2 {
+        color: #FFFFFF;
+        font-weight: 300;
+        font-size: 18px;
+        text-align: left;
+    }
+
+    form {
+        align-content: space-around;
+        display:flex;
+        flex-direction: column;
+        align-content:center; 
+        justify-content: center;
+        align-items: center;
+        max-width: 18em;
+        padding-top: 2.3em;
+        padding-bottom: 1.3em;
+    } 
+
+    input {
+        outline: 0;
+        background: rgba(201, 224, 254, 1);
+        box-sizing: border-box;
+        border: 0;
+        margin: 0 0 20px;
+        padding: 15px;
+        border-radius: 5px;
+        font-size: 13px;
+        width: 100%;
+    }
+    
+    .button {
+        display:flex;
+        padding: 0.5em;
+        margin-bottom: 2em; 
+        background: rgba(12, 80, 166, 1);
+        font-size: 11px;
+        box-sizing: border-box; 
+        width: 50%;
+        height: 3em;
+        outline: 0;
+        text-transform: uppercase;
+        cursor: pointer;
+        color: #FFFFFF;
+        border:none;
+        border-radius: 5px;
+        justify-content: center;
+        align-items: center;
+    } 
+
+    #buttonSignIn { 
+        background:transparent;
+        border: 2px solid rgb(159, 170, 247);
+    }
+
+    #buttonCreateAccount{
+        background:transparent;
+        border: 2px solid rgb(159, 170, 247);
+    }
+
+    #linkForgot{
+        color: #FFFFFF;
+        margin-bottom: 1em;
+        text-decoration: underline;
+        cursor:pointer;
+
+    }
+
+    /* #buttonGoogle{
+        background-image:url(file:///".src/images/Google-logo.png");
+        width: 63%;
+        height: 4em;
+
+    } */
 
 
-.logForm{
-    display:flex;
-    margin:0 auto;
-    flex-direction: column;
-    width: 233px;
-    height: 40px;
-    background-color: aliceblue;
+ }  
+
+  /*960 px*/
+@media screen and (min-width: 1000px){
+
+
 }
 
 #logo {
@@ -205,6 +295,7 @@ body{
       width: 30em;
       height: 6em;
       margin: 1em;
+      padding: 1em;
   }
 
   
@@ -264,15 +355,18 @@ body{
 
 .divPost {
     display: flex;
-    justify-content: center;
+    flex-direction: column-reverse;
     background-color: #f1f1f1;
     margin: 1em;
     width: 30em;
     font-family: 'Open Sans', sans-serif;
-    padding: 1em 0.5em 1em 0.5em;
+    padding: 1em 1.5em 1em 1.5em;
     border-radius: 0.5em;
 }
 
+.divIcons {
+    align-self: flex-end;
+}
 
 .card {
 	display: -webkit-box;
@@ -313,8 +407,6 @@ body{
 	width: 1.3em;
 	margin: 0.5em;
 }
-
-
 
 #radios label {
 	position: relative;
@@ -362,6 +454,36 @@ input[class="sad"]:focus + .svg {
     display: flex;
     justify-content: space-between;
     width: 30em;
+}
+
+.iconsDivPost {
+    width: 0.7em;
+    filter: invert(55%) sepia(0%) saturate(69%) hue-rotate(161deg) brightness(91%) contrast(83%);
+    margin: 0 0.3em 0 0.3em;
+    align-self: baseline;
+}
+
+.iconsDivPost:hover {
+    filter: invert(45%) sepia(89%) saturate(804%) hue-rotate(197deg) brightness(93%) contrast(92%);
+}
+
+.message {
+    margin: 0.3em 0em 1em 0.2em;
+}
+
+.confirmButton {
+    width: 0.7em;
+    width: 1em;
+    align-self: flex-end;
+    filter: invert(55%) sepia(0%) saturate(69%) hue-rotate(161deg) brightness(91%) contrast(83%);
+}
+
+.confirmButton:hover {
+    filter: invert(45%) sepia(89%) saturate(804%) hue-rotate(197deg) brightness(93%) contrast(92%);
+}
+
+.editTextArea {
+    resize: none;
 }
 
   @media screen and (max-width: 850px) {
