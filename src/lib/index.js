@@ -103,3 +103,4 @@ const forgotPassword = (emailAddress) => {
 export {
   myFunction, closeSession, signInUser, singUpNewUser, signUpGoogle, forgotPassword,
 };
+

@@ -130,7 +130,7 @@ const observerAuth = () => {
       afterLogIn(user);
       // User is signed in.
       const displayName = user.displayName;
-    //  console.log(user);
+      //  console.log(user);
       const email = user.email;
       const emailVerified = user.emailVerified;
       const photoURL = user.photoURL;
@@ -283,11 +283,11 @@ const createPost = () => {
   // aquí indicamos que es un input de tipo text
   input.classList.add('createMessage');
   input.placeholder = 'Escribe tu post aquí'
-  input.id  = 'textToSave';
+  input.id = 'textToSave';
 
   // y por ultimo agreamos el componente creado al padre
   contentPost.appendChild(input);
-  
+
   const divCatergorieAndSent = document.createElement('div');
   divCatergorieAndSent.id = 'CatergorieAndSent';
   contentPost.appendChild(divCatergorieAndSent);
@@ -296,7 +296,7 @@ const createPost = () => {
   const saveButton = document.createElement('img');
   saveButton.src = 'img/paper-plane.png';
   saveButton.id = 'saveButton';
-  
+
   saveButton.addEventListener('click', () => {
     const textToSave = input.value;
     console.log(textToSave);
@@ -346,15 +346,16 @@ const savePost = (textPost) => {
   console.log("I am going to save " + texToSave + " to Firestore");
   database.collection("post").add({
     POST: texToSave,
+    like:[],
     postTime: new Date()
   })
-  .then(docRef => {
-    console.log("Status Saved!");
-    console.log("Document written with ID: ", docRef.id);
-  })
-  .catch(error => {
-    console.error("Error adding document: ", error);
-  });
+    .then(docRef => {
+      console.log("Status Saved!");
+      console.log("Document written with ID: ", docRef.id);
+    })
+    .catch(error => {
+      console.error("Error adding document: ", error);
+    });
 };
 
 
@@ -370,76 +371,93 @@ const sendPost = (textPost) => {
 
 
   postsOrdered.onSnapshot((querySnapshot) => {
-      contentMessage.innerHTML = '';
-      querySnapshot.forEach((doc) => {
-            const divPost = document.createElement('div');
-            divPost.id = `divPost-${doc.id}`
-            contentMessage.appendChild(divPost);
-            console.log(doc.id, " => ", doc.data());
-            divPost.innerHTML +=
-            `
+    contentMessage.innerHTML = '';
+    querySnapshot.forEach((doc) => {
+      const divPost = document.createElement('div');
+      divPost.id = `divPost-${doc.id}`
+      contentMessage.appendChild(divPost);
+      console.log(doc.id, " => ", doc.data());
+      divPost.innerHTML +=
+        `
             <p class="message" id='messagePosted'> ${doc.data().POST}</p>
             `
-            const deleteButton = document.createElement('button');
-            deleteButton.innerHTML = 'Eliminar';
-            deleteButton.addEventListener('click' ,() => {
-              deletePost(doc.id);
-            })
 
-            const editButton = document.createElement('button');
-            editButton.innerHTML = 'Editar';
+      const likeButton = document.createElement('button');
+      likeButton.innerHTML = 'Like';
+      likeButton.classList.add('likeButton');
+      likeButton.addEventListener('click', () => {
+        postLike(doc.id);
+        console.log(doc.data().like.length)
+      });
 
-            editButton.id = 'Edit'
-            editButton.addEventListener('click', () => {
-              document.getElementById(`divPost-${doc.id}`).innerHTML = `<textarea id='editTextArea'></textarea>`
-              document.getElementById('editTextArea').value = doc.data().POST;
-              const confirmButton = document.createElement('button');
-              confirmButton.innerHTML = 'confirmar'
-              confirmButton.addEventListener('click', ()=>{
-                editPost(doc.id,document.getElementById('editTextArea').value);
-                console.log('Está saliendo de editar')
-              });
-              document.getElementById(`divPost-${doc.id}`).appendChild(confirmButton);
-            })
-            divPost.appendChild(deleteButton);
-            divPost.appendChild(editButton);
+      const numberLikes = document.createElement('span');
+      numberLikes.id = `numberLikes-${doc.id}`;
+      numberLikes.classList.add('numberLikes');
+      numberLikes.innerHTML = doc.data().like.length;
+
+
+      const deleteButton = document.createElement('button');
+      deleteButton.innerHTML = 'Eliminar';
+      deleteButton.addEventListener('click', () => {
+        deletePost(doc.id);
+      })
+
+      const editButton = document.createElement('button');
+      editButton.innerHTML = 'Editar';
+
+      editButton.id = 'Edit'
+      editButton.addEventListener('click', () => {
+        document.getElementById(`divPost-${doc.id}`).innerHTML = `<textarea id='editTextArea'></textarea>`
+        document.getElementById('editTextArea').value = doc.data().POST;
+        const confirmButton = document.createElement('button');
+        confirmButton.innerHTML = 'confirmar'
+        confirmButton.addEventListener('click', () => {
+          editPost(doc.id, document.getElementById('editTextArea').value);
+          console.log('Está saliendo de editar')
         });
-    })
+
+        document.getElementById(`divPost-${doc.id}`).appendChild(confirmButton);
+      })
+      divPost.appendChild(numberLikes);
+      divPost.appendChild(likeButton);
+      divPost.appendChild(deleteButton);
+      divPost.appendChild(editButton);
+    });
+  })
     .catch((error) => {
-        console.log("Error getting documents: ", error);
+      console.log("Error getting documents: ", error);
     });
 }
 
 //Eliminar Post
-function deletePost(id){
-  database.collection("post").doc(id).delete().then(function() {
+function deletePost(id) {
+  database.collection("post").doc(id).delete().then(function () {
     console.log("Document successfully deleted!");
-  }).catch(function(error) {
+  }).catch(function (error) {
     console.error("Error removing document: ", error);
   });
 }
 
-
 ////Editar Post
-const editPost = (id, textToSave) =>{
+const editPost = (id, textToSave) => {
 
-    const postRef = database.collection("post").doc(id);
-      console.log('Está editando')
-      return postRef.update({
-        POST: textToSave,
-        postTime: new Date()
-      }).then(function() {
-        console.log("Document successfully updated!");
-      }).catch(function(error) {
-        console.error("Error updating document: ", error);
-      }) 
+  const postRef = database.collection("post").doc(id);
+  console.log('Está editando')
+  return postRef.update({
+    POST: textToSave,
+    postTime: new Date()
+  }).then(function () {
+    console.log("Document successfully updated!");
+  }).catch(function (error) {
+    console.error("Error updating document: ", error);
+  })
 }
 
 
 // <-------------Función editar post-------------->
 //  let editPost = (id, textToSave) => {
 //   console.log('Está entrando a editar')
-      
+
 //       database.collection('post').doc(id).set({
 //         POST: textToSave,
 //         postTime: new Date()
@@ -450,7 +468,50 @@ const editPost = (id, textToSave) =>{
 //           console.log('Error update document: ', error)
 //         });
 //     }
-    
 
+const postLike = (id) =>{
+  let user = firebase.auth().currentUser;	
+  console.log('Está entrando el postlike')
+	
+	// de la collection post traeme el documento con el ID, "id"
+	database.collection('post').doc(id).get().then((query) => {
+
+		let post = query.data();
+
+		if (post.like == null || post.like == '') {
+			post.like = [];
+			console.log("ento al like vacio");
+		}
+
+		if (post.like.includes(user.uid)) {
+
+			for (let i = 0; i < post.like.length; i++) {
+
+				if (post.like[i] === user.uid) { //verifica si ya el usuario está en el array
+
+					post.like.splice(i, 1); // sentencia para eliminar un elemento de un array
+					
+					database.collection('post').doc(id).update({ // para actualizar el array
+						like: post.like
+          }); 
+          
+				}
+			}
+		} else {
+
+			post.like.push(user.uid); //entoncesincluyeme este usuario en este array
+			database.collection('post').doc(id).update({ 
+				like: post.like
+			});
+			
+		}
+
+		// document.getElementById(`numberLikes-${doc.id}`).innerHTML = post.like.length;
+	})
+		.catch(function (error) {
+
+		});	
+
+}
 
 
