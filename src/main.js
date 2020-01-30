@@ -11,6 +11,7 @@ myFunction();
 const authSection = document.getElementById('authSection'); // Sección de registro
 const contentPage = document.getElementById('contentPage'); // Sección de parte de arriba del home
 const contentPost = document.getElementById('contentPost'); // Sección de los posts
+const mainContent = document.getElementById('mainContent');
 
 
 // <------Función que carga el Sign In------>
@@ -266,7 +267,6 @@ const afterLogIn = (user) => {
     createPost();
     sendPost();
   } else {
-    window.location.hash = '/NeedVerification';
     console.log('No está verificado');
     const divVerificaction = document.createElement('div');
     divVerificaction.id = 'divVerification';
@@ -276,13 +276,13 @@ const afterLogIn = (user) => {
     buttonClose.classList.add('buttonVerification');
     buttonClose.addEventListener('click', () => {
       closeSession();
-      document.body.style.backgroundColor = 'rgb(82, 115, 211)';
     });
     divVerificaction.innerHTML = '<h3 id="verificationText">Verifica tu mail para poder entrar a la aplicación. Revisa en tu buzón de entrada o en el de spam. </h3>';
     divVerificaction.appendChild(buttonClose);
     authSection.innerHTML = '';
+    mainContent.innerHTML = '';
   }
-}; 
+};
 
 
 // <-----El Routing----->
@@ -291,7 +291,7 @@ window.addEventListener('hashchange', () => {
     loadSignIn();
   } else if (window.location.hash === '#/SignUp') {
     loadSignUp();
-  } else if (window.location.hash === '#/home' || window.location.hash === '#/NeedVerification') {
+  } else if (window.location.hash === '#/home') {
     const actualUser = firebase.auth().currentUser;
     afterLogIn(actualUser);
   } else if (window.location.hash === '#/forgot') {
