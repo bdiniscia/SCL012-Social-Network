@@ -11,7 +11,7 @@ myFunction();
 const authSection = document.getElementById('authSection'); // Sección de registro
 const contentPage = document.getElementById('contentPage'); // Sección de parte de arriba del home
 const contentPost = document.getElementById('contentPost'); // Sección de los posts
-const mainContent = document.getElementById('mainContent');
+const mainContent = document.getElementById('mainContent'); // Sección que contiene ContentPost y ContentMessage
 
 
 // <------Función que carga el Sign In------>
@@ -131,6 +131,7 @@ const sendButton = () => {
 
   singUpNewUser(email, password, name);
 };
+
 
 
 // <------Loggear usuario con Firebase------>
