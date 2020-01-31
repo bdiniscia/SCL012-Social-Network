@@ -510,6 +510,15 @@ input[class="sad"]:focus + .svg {
     resize: none;
 }
 
+.likeButton {
+    width: 0.8em;
+}
+
+.numberLikes {
+    font-size: 15px;
+    color: #555555;
+}
+
   @media screen and (max-width: 850px) {
 
     .createMessage {

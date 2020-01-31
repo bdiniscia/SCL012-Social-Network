@@ -1,10 +1,4 @@
 // aqui exportaras las funciones que necesites
-
-const myFunction = () => {
-  // aqui tu codigo
-  console.log('Hola mundo!');
-};
-
 // Función que cierra sesión
 const closeSession = () => {
   firebase.auth().signOut()
@@ -101,6 +95,5 @@ const forgotPassword = (emailAddress) => {
 
 
 export {
-  myFunction, closeSession, signInUser, singUpNewUser, signUpGoogle, forgotPassword,
+  closeSession, signInUser, singUpNewUser, signUpGoogle, forgotPassword,
 };
-
