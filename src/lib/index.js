@@ -1,4 +1,7 @@
 // aqui exportaras las funciones que necesites
+
+const database = firebase.firestore();
+
 // Función que cierra sesión
 const closeSession = () => {
   firebase.auth().signOut()
@@ -93,7 +96,98 @@ const forgotPassword = (emailAddress) => {
   });
 };
 
+// Eliminar Post
+const deletePost = (id) => {
+  database.collection('post').doc(id).delete().then(() => {
+    console.log('Document successfully deleted!');
+  })
+    .catch((error) => {
+      console.error('Error removing document: ', error);
+    });
+};
+
+// Guardar Post en Firebase
+const savePost = (textPost) => {
+  const texToSave = textPost;
+  console.log(`I am going to save ${  texToSave  } to Firestore`);
+  database.collection('post').add({
+    POST: texToSave,
+    like: [],
+    postTime: new Date(),
+  })
+    .then((docRef) => {
+      console.log('Status Saved!');
+      console.log('Document written with ID: ', docRef.id);
+    })
+    .catch((error) => {
+      console.error('Error adding document: ', error);
+    });
+};
+
+// //Editar Post
+const editPost = (id, textToSave) => {
+  const postRef = database.collection('post').doc(id);
+  console.log('Está editando');
+  return postRef.update({
+    POST: textToSave,
+    postTime: new Date(),
+  }).then(() => {
+    console.log('Document successfully updated!');
+  }).catch((error) => {
+    console.error('Error updating document: ', error);
+  });
+};
+
+// <-------------Función editar post-------------->
+//  let editPost = (id, textToSave) => {
+//   console.log('Está entrando a editar')
+
+//       database.collection('post').doc(id).set({
+//         POST: textToSave,
+//         postTime: new Date()
+//       }).then(function () {
+//         console.log('document successfully updated!!');
+//       })
+//         .catch(function () {
+//           console.log('Error update document: ', error)
+//         });
+//     }
+
+const postLike = (id) => {
+  const user = firebase.auth().currentUser;
+  console.log('Está entrando el postlike');
+
+  // de la collection post traeme el documento con el ID, "id"
+  database.collection('post').doc(id).get().then((query) => {
+    const post = query.data();
+
+    if (post.like == null || post.like == '') {
+      post.like = [];
+      console.log('ento al like vacio');
+    }
+
+    if (post.like.includes(user.uid)) {
+      for (let i = 0; i < post.like.length; i++) {
+        if (post.like[i] === user.uid) { // verifica si ya el usuario está en el array
+          post.like.splice(i, 1); // sentencia para eliminar un elemento de un array
+
+          database.collection('post').doc(id).update({ // para actualizar el array
+            like: post.like,
+          });
+        }
+      }
+    } else {
+      post.like.push(user.uid); // entoncesincluyeme este usuario en este array
+      database.collection('post').doc(id).update({
+        like: post.like,
+      });
+    }
+  })
+    .catch((error) => {
+      console.log(error);
+    });
+};
 
 export {
-  closeSession, signInUser, singUpNewUser, signUpGoogle, forgotPassword,
+  closeSession, signInUser, singUpNewUser, signUpGoogle, forgotPassword, deletePost, savePost, editPost, postLike,
 };
