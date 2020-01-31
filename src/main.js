@@ -309,11 +309,7 @@ const createPost = () => {
   const input = document.createElement('textarea');
   // aquí indicamos que es un input de tipo text
   input.classList.add('createMessage');
-<<<<<<< HEAD
-  input.placeholder = 'Escribe tu post aquí'
-=======
   input.placeholder = 'Escribe tu post aquí';
->>>>>>> 13f02854e186c502b15f88bc75853d7bbfbd6ad2
   input.id = 'textToSave';
 
   // y por ultimo agreamos el componente creado al padre
@@ -372,7 +368,6 @@ const createPost = () => {
 
 // Guardar Post en Firebase
 const savePost = (textPost) => {
-<<<<<<< HEAD
   const texToSave = textPost;
   console.log("I am going to save " + texToSave + " to Firestore");
   database.collection("post").add({
@@ -386,19 +381,6 @@ const savePost = (textPost) => {
     })
     .catch(error => {
       console.error("Error adding document: ", error);
-=======
-  console.log(`I am going to save ${textPost} to Firestore`);
-  database.collection('post').add({
-    POST: textPost,
-    postTime: new Date(),
-  })
-    .then((docRef) => {
-      console.log('Status Saved!');
-      console.log('Document written with ID: ', docRef.id);
-    })
-    .catch((error) => {
-      console.error('Error adding document: ', error);
->>>>>>> 13f02854e186c502b15f88bc75853d7bbfbd6ad2
     });
 };
 
@@ -407,25 +389,16 @@ const savePost = (textPost) => {
 const contentMessage = document.getElementById('contentMessage');
 
 const sendPost = (textPost) => {
-<<<<<<< HEAD
-  const texToSave = textPost;
-  console.log("I am going to save " + texToSave + " to Firestore");
-
-  const colletionOfPost = database.collection("post")
-  const postsOrdered = colletionOfPost.orderBy("postTime", "desc")
-=======
   console.log(`I am going to save ${textPost} to Firestore`);
 
   const colletionOfPost = database.collection('post');
   const postsOrdered = colletionOfPost.orderBy('postTime', 'desc');
->>>>>>> 13f02854e186c502b15f88bc75853d7bbfbd6ad2
 
 
   postsOrdered.onSnapshot((querySnapshot) => {
     contentMessage.innerHTML = '';
     querySnapshot.forEach((doc) => {
       const divPost = document.createElement('div');
-<<<<<<< HEAD
       divPost.id = `divPost-${doc.id}`
       contentMessage.appendChild(divPost);
       console.log(doc.id, " => ", doc.data());
@@ -565,96 +538,3 @@ const postLike = (id) =>{
 		});	
 
 }
-
-
-=======
-      divPost.classList.add('divPost');
-      divPost.id = `divPost-${doc.id}`;
-      contentMessage.appendChild(divPost);
-      console.log(doc.id, ' => ', doc.data());
-
-      divPost.innerHTML += `
-            <p class="message" id='messagePosted'> ${doc.data().POST}</p>
-            `;
-
-      const divIcons = document.createElement('div');
-      divIcons.classList.add('divIcons');
-      divPost.appendChild(divIcons);
-
-      const deleteButton = document.createElement('img');
-      deleteButton.classList.add('iconsDivPost');
-      deleteButton.src = 'img/close.svg';
-      deleteButton.addEventListener('click', () => {
-        deletePost(doc.id);
-      });
-
-      const editButton = document.createElement('img');
-      editButton.src = 'img/edit.svg';
-      editButton.classList.add('iconsDivPost');
-      editButton.id = 'Edit';
-
-      editButton.addEventListener('click', () => {
-        document.getElementById(`divPost-${doc.id}`).innerHTML = 
-        `<textarea id="editTextArea" class="editTextArea"></textarea>`;
-        document.getElementById('editTextArea').value = doc.data().POST;
-        const confirmButton = document.createElement('img');
-        confirmButton.src = 'img/tick.svg';
-        confirmButton.classList.add('confirmButton');
-
-        confirmButton.addEventListener('click', () => {
-          editPost(doc.id, document.getElementById('editTextArea').value);
-          console.log('Está saliendo de editar');
-        });
-
-        document.getElementById(`divPost-${doc.id}`).appendChild(confirmButton);
-      });
-      divIcons.appendChild(deleteButton);
-      divIcons.appendChild(editButton);
-    })
-      .catch((error) => {
-        console.log('Error getting documents: ', error);
-      });
-  });
-};
-
-// Eliminar Post
-function deletePost(id) {
-  database.collection('post').doc(id).delete().then(() => {
-    console.log('Document successfully deleted!');
-  })
-    .catch((error) => {
-      console.error('Error getting documents: ', error);
-    });
-}
-
-
-// //Editar Post
-const editPost = (id, textToSave) => {
-  const postRef = database.collection('post').doc(id);
-  console.log('Está editando');
-  return postRef.update({
-    POST: textToSave,
-    postTime: new Date(),
-  }).then(() => {
-    console.log('Document successfully updated!');
-  }).catch((error) => {
-    console.error('Error updating document: ', error);
-  });
-};
-
-
-// <-------------Función editar post-------------->
-//  let editPost = (id, textToSave) => {
-//   console.log('Está entrando a editar')
-
-//       database.collection('post').doc(id).set({
-//         POST: textToSave,
-//         postTime: new Date()
-//       }).then(function () {
-//         console.log('document successfully updated!!');
-//       })
-//         .catch(function () {
-//           console.log('Error update document: ', error)
-//         });
-//     }
->>>>>>> 13f02854e186c502b15f88bc75853d7bbfbd6ad2
