@@ -231,7 +231,7 @@ const afterLogIn = (user) => {
             </a>
           </li>
          <li>
-            <a class="icons-a" href="#">
+            <a class="icons-a" href="#/jobs">
               <img class="icon icon--2x icon-white" src="img/work.svg">
               <span class="textIcon">Trabajo</span>
             </a>
@@ -333,7 +333,7 @@ const createPost = () => {
     console.log(textToSave);
     savePost(textToSave);
     sendPost(textToSave);
-    postCategory();
+    // postCategory();
     input.value = '';
   });
   divCatergorieAndSent.innerHTML += `
@@ -414,7 +414,7 @@ const savePost = (textPost) => {
 
   database.collection('post').add({
     POST: texToSave,
-    // category: categorySelect,
+    username:,
     like: [],
     postTime: new Date(),
     categories: {
@@ -600,6 +600,7 @@ const postLike = (id) => {
 const contentCategory = document.getElementById('contentCategory');
 
 const postCategory = () => {
+  console.log(`I am going to save ${doc.data().categories.jobs} to Firestore`);
   window.location.hash = '/jobs';
   console.log("Entro a la funcion de postCategory");
 
@@ -616,5 +617,13 @@ const postCategory = () => {
       <p class="message" id='messageCategory'>HOLA</p>
       `;
    contentCategory.appendChild(divCategory);
+  
+}
+
+
+const username = () =>{
+  const user = firebase.auth().currentUser;
+  console.log('Está entrando el postlike');
+
   
 }
