@@ -44,11 +44,9 @@ const signInUser = (email, password) => {
 
 const singUpNewUser = (email, password, name) => {
   firebase.auth().createUserWithEmailAndPassword(email, password)
-    .then((result) => {
-      return result.user.updateProfile({
+    .then((result) => result.user.updateProfile({
         displayName: name,
-      });
-    })
+      }))
     .then(() => {
       emailVerification();
     })
@@ -69,7 +67,7 @@ const singUpNewUser = (email, password, name) => {
 
 const signUpGoogle = () => {
   const provider = new firebase.auth.GoogleAuthProvider();
-  
+
   firebase.auth().signInWithPopup(provider).then((result) => {
     // This gives you a Google Access Token. You can use it to access the Google API.
     const token = result.credential.accessToken;
@@ -107,13 +105,58 @@ const deletePost = (id) => {
 };
 
 // Guardar Post en Firebase
+// Guardar Post en Firebase
 const savePost = (textPost) => {
   const texToSave = textPost;
-  console.log(`I am going to save ${  texToSave  } to Firestore`);
+  console.log(`I am going to save ${texToSave} to Firestore`);
+  console.log('Prueba Radio Button');
+
+  // - De aca
+  const rate = document.getElementsByName('rating');
+
+  // - Imprime la cantidad de botones tipo radio
+  console.log(rate.length);
+
+  let categorySelect;
+
+  for (let i = 0; i < rate.length; i++) {
+    if (rate[i].checked) {
+      console.log('Es el elemento ' + i);
+      categorySelect = i;
+    }
+  }
+
+  // - Se setean en falso todos los valores
+  let check_jobs = false;
+  let check_visa = false;
+  let check_rent = false;
+  let check_other = false;
+
+  // - Se verifica cuál categoría está activa
+  if (categorySelect == 0) {
+    check_jobs = true;
+  }
+  if (categorySelect == 1) {
+    check_visa = true;
+  }
+  if (categorySelect == 2) {
+    check_rent = true;
+  }
+  if (categorySelect == 3) {
+    check_other = true;
+  }
+
   database.collection('post').add({
     POST: texToSave,
+    // category: categorySelect,
     like: [],
     postTime: new Date(),
+    categories: {
+      jobs: check_jobs,
+      visa: check_visa,
+      rent: check_rent,
+      other: check_other,
+    },
   })
     .then((docRef) => {
       console.log('Status Saved!');
@@ -191,4 +234,3 @@ const postLike = (id) => {
 export {
   closeSession, signInUser, singUpNewUser, signUpGoogle, forgotPassword, deletePost, savePost, editPost, postLike,
 };
-
