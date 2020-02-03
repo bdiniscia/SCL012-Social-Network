@@ -291,6 +291,7 @@ const postsOther = database.collectionGroup('post').where('categories.other', '=
 const postsVisa = database.collectionGroup('post').where('categories.visa', '==', true).orderBy('postTime', 'desc');
 const postsRent = database.collectionGroup('post').where('categories.rent', '==', true).orderBy('postTime', 'desc');
 
+
 // <--------El Routing-------->
 window.addEventListener('hashchange', () => {
   if (window.location.hash === '#/SignIn') {
@@ -413,7 +414,7 @@ const generatePosts = (newFilter) => {
       divIcons.classList.add('divIcons');
 
       const divLikes = document.createElement('div'); // Div de los íconos de Me Gusta y Contador
-      divLikes.classList.add('divIcons');
+      divLikes.classList.add('divLike');
 
 
       const deleteButton = document.createElement('img'); // Botón de borrar
@@ -443,7 +444,8 @@ const generatePosts = (newFilter) => {
       });
 
       // Esto imprime la catogoría del post en el div
-      let categoryPost = document.createElement('span');
+      const categoryPost = document.createElement('span');
+      categoryPost.classList.add('categoryPost');
       categoryPost.innerHTML = 'Categoría: Sin Categoría';
       if (doc.data().categories.jobs) {
         categoryPost.innerHTML = 'Categoría: Trabajos';
