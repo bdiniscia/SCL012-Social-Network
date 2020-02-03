@@ -295,13 +295,18 @@ window.addEventListener('hashchange', () => {
   } else if (window.location.hash === '#/home') {
     const actualUser = firebase.auth().currentUser;
     afterLogIn(actualUser);
+    postCategory();
   } else if (window.location.hash === '#/forgot') {
     generateForgot();
+  }else if (window.location.hash === '#/jobs') {
+    postCategory();
   }
 });
 
 
-// <-----Logica Post------>
+
+// <-------------Función Categoria de Post-------------->
+
 
 const createPost = () => {
   // aquí agregamos el componente de tipo input
@@ -328,6 +333,7 @@ const createPost = () => {
     console.log(textToSave);
     savePost(textToSave);
     sendPost(textToSave);
+    postCategory();
     input.value = '';
   });
   divCatergorieAndSent.innerHTML += `
@@ -344,7 +350,7 @@ const createPost = () => {
 			  </label>
 
         <label for="happy">
-			    <input type="radio" name="rating" class="happy" id="happy" value="visa" checked />
+			    <input type="radio" name="rating" class="happy" id="happy" value="visa" />
 			    <img class="svg" src="img/passport.svg">
 			  </label>
 
@@ -366,6 +372,68 @@ const createPost = () => {
 };
 
 
+// Guardar Post en Firebase
+const savePost = (textPost) => {
+  const texToSave = textPost;
+  console.log(`I am going to save ${  texToSave  } to Firestore`);
+  console.log("Prueba Radio Button");
+  
+  // - De aca
+  const rate = document.getElementsByName('rating');
+  
+  // - Imprime la cantidad de botones tipo radio
+  console.log(rate.length);
+  
+  let categorySelect;
+  
+  for(let i=0; i<rate.length; i++){
+      if(rate[i].checked){
+        console.log("Es el elemento" + i);
+        categorySelect = i;
+      }
+  }
+
+  //- Se setean en falso todos los valores
+  let check_jobs = false;
+  let check_visa = false;
+  let check_arriendos = false;
+  let check_otros = false;
+
+  // - Se verifica cuál categoría está activa
+  if(categorySelect==0){
+    check_jobs = true;
+  }
+  if(categorySelect==1){
+    check_visa = true;
+  }
+  if(categorySelect==2){
+    check_arriendos = true;
+  }
+  if(categorySelect==3){
+    check_otros = true;
+  }
+
+  database.collection('post').add({
+    POST: texToSave,
+    // category: categorySelect,
+    like: [],
+    postTime: new Date(),
+    categories: {
+      jobs: check_jobs,
+      visa: check_visa,
+      arriendos: check_arriendos,
+      otros: check_otros,
+    }
+  })
+    .then(docRef => {
+      console.log("Status Saved!");
+      console.log("Document written with ID: ", docRef.id);
+    })
+    .catch(error => {
+      console.error("Error adding document: ", error);
+    });
+};
+
 
 
 // Traer Post
@@ -373,10 +441,8 @@ const contentMessage = document.getElementById('contentMessage');
 
 const sendPost = (textPost) => {
   console.log(`I am going to save ${textPost} to Firestore`);
-
   const colletionOfPost = database.collection('post');
   const postsOrdered = colletionOfPost.orderBy('postTime', 'desc');
-
 
   postsOrdered.onSnapshot((querySnapshot) => {
     contentMessage.innerHTML = '';
@@ -416,23 +482,22 @@ const sendPost = (textPost) => {
       deleteButton.src = 'img/close.svg';
       deleteButton.addEventListener('click', () => {
         deletePost(doc.id);
-      });
+      })
 
       const editButton = document.createElement('img'); // Botón de editar
       editButton.src = 'img/edit.svg';
       editButton.classList.add('iconsDivPost');
       editButton.id = 'Edit';
 
+      editButton.id = 'Edit'
       editButton.addEventListener('click', () => {
         document.getElementById(`divPost-${doc.id}`).innerHTML = '<textarea id=\'editTextArea\'></textarea>';
         document.getElementById('editTextArea').value = doc.data().POST;
-        const confirmButton = document.createElement('img');
-        confirmButton.src = 'img/tick.svg';
-        confirmButton.classList.add('confirmButton');
-
+        const confirmButton = document.createElement('button');
+        confirmButton.innerHTML = 'confirmar'
         confirmButton.addEventListener('click', () => {
           editPost(doc.id, document.getElementById('editTextArea').value);
-          console.log('Está saliendo de editar');
+          console.log('Está saliendo de editar')
         });
         document.getElementById(`divPost-${doc.id}`).appendChild(confirmButton);
       });
@@ -450,3 +515,109 @@ const sendPost = (textPost) => {
       console.log('Error getting documents: ', error);
     });
 };
+
+
+// Eliminar Post
+const deletePost = (id) => {
+  database.collection('post').doc(id).delete().then(() => {
+    console.log('Document successfully deleted!');
+  })
+    .catch((error) => {
+      console.error('Error removing document: ', error);
+    })
+};
+
+// //Editar Post
+const editPost = (id, textToSave) => {
+
+  const postRef = database.collection("post").doc(id);
+  console.log('Está editando')
+  return postRef.update({
+    POST: textToSave,
+    postTime: new Date()
+  }).then(function () {
+    console.log("Document successfully updated!");
+  }).catch(function (error) {
+    console.error("Error updating document: ", error);
+  })
+}
+
+
+// <-------------Función editar post-------------->
+//  let editPost = (id, textToSave) => {
+//   console.log('Está entrando a editar')
+
+//       database.collection('post').doc(id).set({
+//         POST: textToSave,
+//         postTime: new Date()
+//       }).then(function () {
+//         console.log('document successfully updated!!');
+//       })
+//         .catch(function () {
+//           console.log('Error update document: ', error)
+//         });
+//     }
+
+
+// <-------------Función like post-------------->
+const postLike = (id) => {
+  const user = firebase.auth().currentUser;
+  console.log('Está entrando el postlike');
+
+  // de la collection post traeme el documento con el ID, "id"
+  database.collection('post').doc(id).get().then((query) => {
+    const post = query.data();
+
+    if (post.like == null || post.like == '') {
+      post.like = [];
+      console.log('ento al like vacio');
+    }
+
+    if (post.like.includes(user.uid)) {
+      for (let i = 0; i < post.like.length; i++) {
+        if (post.like[i] === user.uid) { // verifica si ya el usuario está en el array
+          post.like.splice(i, 1); // sentencia para eliminar un elemento de un array
+
+          database.collection('post').doc(id).update({ // para actualizar el array
+            like: post.like,
+          });
+        }
+      }
+    } else {
+      post.like.push(user.uid); // entoncesincluyeme este usuario en este array
+      database.collection('post').doc(id).update({
+        like: post.like,
+      });
+    }
+
+    // document.getElementById(`numberLikes-${doc.id}`).innerHTML = post.like.length;
+  })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+
+// <-----Logica Post------>
+
+const contentCategory = document.getElementById('contentCategory');
+
+const postCategory = () => {
+  window.location.hash = '/jobs';
+  console.log("Entro a la funcion de postCategory");
+
+  database.collection('post')
+  .where('categories.jobs', '==', true)
+  .get()
+  .then(() => {
+    console.log('trae esto');
+      // ...
+  });
+
+  const divCategory = document.createElement('div');
+  divCategory.innerHTML += `
+      <p class="message" id='messageCategory'>HOLA</p>
+      `;
+   contentCategory.appendChild(divCategory);
+  
+}
