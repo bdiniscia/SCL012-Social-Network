@@ -330,10 +330,9 @@ const createPost = () => {
 
   saveButton.addEventListener('click', () => {
     let textToSave = input.value;
+    const rate = document.getElementsByName('rating');
     console.log(textToSave);
-    savePost(textToSave);
-    sendPost(textToSave);
-    postCategory();
+    savePost(textToSave, rate);
     input.value = '';
   });
   divCatergorieAndSent.innerHTML += `
