@@ -110,6 +110,9 @@ const savePost = (textPost) => {
   const texToSave = textPost;
   console.log(`I am going to save ${texToSave} to Firestore`);
   console.log('Prueba Radio Button');
+  const user = firebase.auth().currentUser;
+  console.log(user);
+
 
   // - De aca
   const rate = document.getElementsByName('rating');
@@ -151,6 +154,8 @@ const savePost = (textPost) => {
     // category: categorySelect,
     like: [],
     postTime: new Date(),
+    photoURL: user.photoURL,
+    name: user.displayName,
     categories: {
       jobs: check_jobs,
       visa: check_visa,
