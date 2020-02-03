@@ -421,7 +421,12 @@ const generatePosts = (newFilter) => {
       deleteButton.classList.add('iconsDivPost');
       deleteButton.src = 'img/close.svg';
       deleteButton.addEventListener('click', () => {
-        deletePost(doc.id);
+        const actualUser = firebase.auth().currentUser;
+        if (actualUser.uid === doc.data().userID) {
+          deletePost(doc.id);
+        } else {
+          alert('No puedes eliminar este post porque no eres el autor')
+        }
       });
 
       const editButton = document.createElement('img'); // Botón de editar
@@ -431,16 +436,21 @@ const generatePosts = (newFilter) => {
 
       editButton.id = 'Edit';
       editButton.addEventListener('click', () => {
-        document.getElementById(`divPost-${doc.id}`).innerHTML = '<textarea id=\'editTextArea\'></textarea>';
-        document.getElementById('editTextArea').value = doc.data().POST;
-        const confirmButton = document.createElement('img');
-        confirmButton.src = 'img/tick.svg';
-        confirmButton.classList.add('confirmButton');
-        confirmButton.addEventListener('click', () => {
-          editPost(doc.id, document.getElementById('editTextArea').value);
-          console.log('Está saliendo de editar');
-        });
-        document.getElementById(`divPost-${doc.id}`).appendChild(confirmButton);
+        const actualUser = firebase.auth().currentUser;
+        if (actualUser.uid === doc.data().userID) {
+          document.getElementById(`divPost-${doc.id}`).innerHTML = '<textarea id=\'editTextArea\'></textarea>';
+          document.getElementById('editTextArea').value = doc.data().POST;
+          const confirmButton = document.createElement('img');
+          confirmButton.src = 'img/tick.svg';
+          confirmButton.classList.add('confirmButton');
+          confirmButton.addEventListener('click', () => {
+            editPost(doc.id, document.getElementById('editTextArea').value);
+            console.log('Está saliendo de editar');
+          });
+          document.getElementById(`divPost-${doc.id}`).appendChild(confirmButton);
+        } else {
+          alert('No puedes editar este post porque no eres el autor');
+        }
       });
 
       // Esto imprime la catogoría del post en el div
@@ -475,13 +485,12 @@ const generatePosts = (newFilter) => {
       divLikes.appendChild(likeButton);
 
       divPost.appendChild(dateStamp);
-      
+
       divPost.appendChild(upperDiv);
       upperDiv.appendChild(username);
       upperDiv.appendChild(divIcons);
       divIcons.appendChild(deleteButton);
       divIcons.appendChild(editButton);
-
     });
   })
     .catch((error) => {

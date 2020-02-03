@@ -168,7 +168,7 @@ const editPost = (id, textToSave) => {
   console.log('Está editando');
   return postRef.update({
     POST: textToSave,
-    postTime: new Date(),
+    postTime: new Date().toUTCString(),
   }).then(() => {
     console.log('Document successfully updated!');
   }).catch((error) => {

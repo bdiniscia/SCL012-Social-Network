@@ -497,7 +497,7 @@ input[class="sad"]:focus + .svg {
 }
 
 .message {
-    margin: 0.3em 0em 1em 0.2em;
+    margin: 1em 0em 1em 0.2em;
 }
 
 .confirmButton {
