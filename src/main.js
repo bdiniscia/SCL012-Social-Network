@@ -295,13 +295,18 @@ window.addEventListener('hashchange', () => {
   } else if (window.location.hash === '#/home') {
     const actualUser = firebase.auth().currentUser;
     afterLogIn(actualUser);
+    postCategory();
   } else if (window.location.hash === '#/forgot') {
     generateForgot();
+  }else if (window.location.hash === '#/jobs') {
+    postCategory();
   }
 });
 
 
-// <-----Logica Post------>
+
+// <-------------Función Categoria de Post-------------->
+
 
 const createPost = () => {
   // aquí agregamos el componente de tipo input
@@ -328,6 +333,7 @@ const createPost = () => {
     console.log(textToSave);
     savePost(textToSave);
     sendPost(textToSave);
+    postCategory();
     input.value = '';
   });
   divCatergorieAndSent.innerHTML += `
@@ -344,7 +350,7 @@ const createPost = () => {
 			  </label>
 
         <label for="happy">
-			    <input type="radio" name="rating" class="happy" id="happy" value="visa" checked />
+			    <input type="radio" name="rating" class="happy" id="happy" value="visa" />
 			    <img class="svg" src="img/passport.svg">
 			  </label>
 
@@ -369,10 +375,54 @@ const createPost = () => {
 const savePost = (textPost) => {
   const texToSave = textPost;
   console.log(`I am going to save ${  texToSave  } to Firestore`);
+  console.log("Prueba Radio Button");
+  
+  // - De aca
+  const rate = document.getElementsByName('rating');
+  
+  // - Imprime la cantidad de botones tipo radio
+  console.log(rate.length);
+  
+  let categorySelect;
+  
+  for(let i=0; i<rate.length; i++){
+      if(rate[i].checked){
+        console.log("Es el elemento" + i);
+        categorySelect = i;
+      }
+  }
+
+  //- Se setean en falso todos los valores
+  let check_jobs = false;
+  let check_visa = false;
+  let check_arriendos = false;
+  let check_otros = false;
+
+  // - Se verifica cuál categoría está activa
+  if(categorySelect==0){
+    check_jobs = true;
+  }
+  if(categorySelect==1){
+    check_visa = true;
+  }
+  if(categorySelect==2){
+    check_arriendos = true;
+  }
+  if(categorySelect==3){
+    check_otros = true;
+  }
+
   database.collection('post').add({
     POST: texToSave,
+    // category: categorySelect,
     like: [],
     postTime: new Date(),
+    categories: {
+      jobs: check_jobs,
+      visa: check_visa,
+      arriendos: check_arriendos,
+      otros: check_otros,
+    }
   })
     .then(docRef => {
       console.log("Status Saved!");
@@ -389,10 +439,8 @@ const contentMessage = document.getElementById('contentMessage');
 
 const sendPost = (textPost) => {
   console.log(`I am going to save ${textPost} to Firestore`);
-
   const colletionOfPost = database.collection('post');
   const postsOrdered = colletionOfPost.orderBy('postTime', 'desc');
-
 
   postsOrdered.onSnapshot((querySnapshot) => {
     contentMessage.innerHTML = '';
@@ -507,6 +555,8 @@ const editPost = (id, textToSave) => {
 //         });
 //     }
 
+
+// <-------------Función like post-------------->
 const postLike = (id) => {
   const user = firebase.auth().currentUser;
   console.log('Está entrando el postlike');
@@ -543,3 +593,28 @@ const postLike = (id) => {
       console.log(error);
     });
 };
+
+
+// <-----Logica Post------>
+
+const contentCategory = document.getElementById('contentCategory');
+
+const postCategory = () => {
+  window.location.hash = '/jobs';
+  console.log("Entro a la funcion de postCategory");
+
+  database.collection('post')
+  .where('categories.jobs', '==', true)
+  .get()
+  .then(() => {
+    console.log('trae esto');
+      // ...
+  });
+
+  const divCategory = document.createElement('div');
+  divCategory.innerHTML += `
+      <p class="message" id='messageCategory'>HOLA</p>
+      `;
+   contentCategory.appendChild(divCategory);
+  
+}
