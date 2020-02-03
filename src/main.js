@@ -180,31 +180,31 @@ const afterLogIn = (user) => {
         <img src="img/Logo2-long.png" id="logo"> 
         <ul class="list-icon">
           <li id="top-bar">
-            <a class="icons-a" href="#">
+            <a class="icons-a" href="#/home">
               <img class="icon icon--2x icon-white" src="img/home.svg">
               <span class="textIcon">Inicio</span>
             </a>
           </li>
       <li id="top-bar">
-        <a class="icons-a" href="#">
+        <a class="icons-a" href="#/jobs">
           <img class="icon icon--2x icon-white" src="img/work.svg">
           <span class="textIcon">Trabajo</span>
         </a>
       </li>
       <li id="top-bar">
-        <a class="icons-a" href="#">
+        <a class="icons-a" href="#/visa">
           <img class="icon icon--2x icon-white" src="img/passport.svg">
           <span class="textIcon">Visa</span>
         </a>
       </li>
       <li id="top-bar">
-        <a class="icons-a" href="#">
+        <a class="icons-a" href="#/rent">
           <img class="icon icon--2x icon-white" src="img/rent.svg">
           <span class="textIcon">Arriendos</span>
         </a>
       </li>
       <li id="top-bar">
-        <a class="icons-a" href="#">
+        <a class="icons-a" href="#/other">
           <img class="icon icon--2x icon-white" src="img/more.svg">
           <span class="textIcon">Otros</span>
         </a>
@@ -225,7 +225,7 @@ const afterLogIn = (user) => {
       <nav class="navigation navigation--inline">
         <ul id="classOfList">
           <li>
-            <a class="icons-a" href="#">
+            <a class="icons-a" href="#/home">
               <img class="icon icon--2x icon-white" src="img/home.svg">
               <span class="textIcon">Inicio</span>
             </a>
@@ -237,19 +237,19 @@ const afterLogIn = (user) => {
             </a>
           </li>
           <li>
-           <a class="icons-a" href="#">
+           <a class="icons-a" href="#/visa">
               <img class="icon icon--2x icon-white" src="img/passport.svg">
               <span class="textIcon">Visa</span>
            </a>
           </li>
           <li>
-            <a class="icons-a" href="#">
+            <a class="icons-a" href="#/rent">
               <img class="icon icon--2x icon-white" src="img/rent.svg">
               <span class="textIcon">Arriendos</span>
             </a>
           </li>
           <li>
-            <a class="icons-a" href="#">
+            <a class="icons-a" href="#/other">
               <img class="icon icon--2x icon-white" src="img/more.svg">
               <span class="textIcon">Otros</span>
             </a>
@@ -285,8 +285,14 @@ const afterLogIn = (user) => {
   }
 };
 
+// <------ Los posts categorizados por category ----->
+const postsJobs = database.collectionGroup('post').where('categories.jobs', '==', true).orderBy('postTime', 'desc');
+const postsOther = database.collectionGroup('post').where('categories.other', '==', true).orderBy('postTime', 'desc');
+const postsVisa = database.collectionGroup('post').where('categories.visa', '==', true).orderBy('postTime', 'desc');
+const postsRent = database.collectionGroup('post').where('categories.rent', '==', true).orderBy('postTime', 'desc');
 
-// <-----El Routing----->
+
+// <--------El Routing-------->
 window.addEventListener('hashchange', () => {
   if (window.location.hash === '#/SignIn') {
     loadSignIn();
@@ -295,18 +301,21 @@ window.addEventListener('hashchange', () => {
   } else if (window.location.hash === '#/home') {
     const actualUser = firebase.auth().currentUser;
     afterLogIn(actualUser);
-    postCategory();
   } else if (window.location.hash === '#/forgot') {
     generateForgot();
-  }else if (window.location.hash === '#/jobs') {
-    postCategory();
+  } else if (window.location.hash === '#/jobs') {
+    generatePosts(postsJobs);
+  } else if (window.location.hash === '#/other') {
+    generatePosts(postsOther);
+  } else if (window.location.hash === '#/visa') {
+    generatePosts(postsVisa);
+  } else if (window.location.hash === '#/rent') {
+    generatePosts(postsRent);
   }
 });
 
 
-
-// <-------------Función Categoria de Post-------------->
-
+// <-------------Función que crea el toda la sección de Crear Post-------------->
 
 const createPost = () => {
   // aquí agregamos el componente de tipo input
@@ -329,11 +338,10 @@ const createPost = () => {
   saveButton.id = 'saveButton';
 
   saveButton.addEventListener('click', () => {
-    let textToSave = input.value;
+    const textToSave = input.value;
+    const rate = document.getElementsByName('rating');
     console.log(textToSave);
-    savePost(textToSave);
-    sendPost(textToSave);
-    // postCategory();
+    savePost(textToSave, rate);
     input.value = '';
   });
   divCatergorieAndSent.innerHTML += `
@@ -372,15 +380,11 @@ const createPost = () => {
 };
 
 
-// Traer Post
 const contentMessage = document.getElementById('contentMessage');
 
-const sendPost = (textPost) => {
-  console.log(`I am going to save ${textPost} to Firestore`);
-  const colletionOfPost = database.collection('post');
-  const postsOrdered = colletionOfPost.orderBy('postTime', 'desc');
-
-  postsOrdered.onSnapshot((querySnapshot) => {
+// <------- Esta función genera todo el HTML y DOM de los posts posteados ------>
+const generatePosts = (newFilter) => {
+  newFilter.onSnapshot((querySnapshot) => {
     contentMessage.innerHTML = '';
     querySnapshot.forEach((doc) => {
       const divPost = document.createElement('div'); // El div de todo el post
@@ -388,8 +392,8 @@ const sendPost = (textPost) => {
       divPost.id = `divPost-${doc.id}`;
       contentMessage.appendChild(divPost);
       divPost.innerHTML += `
-      <p class="message" id='messagePosted'>${doc.data().POST}</p>
-      `;
+    <p class="message" id='messagePosted'>${doc.data().POST}</p>
+    `;
 
 
       const likeButton = document.createElement('img'); // Botón de Me Gusta
@@ -410,7 +414,7 @@ const sendPost = (textPost) => {
       divIcons.classList.add('divIcons');
 
       const divLikes = document.createElement('div'); // Div de los íconos de Me Gusta y Contador
-      divLikes.classList.add('divIcons');
+      divLikes.classList.add('divLike');
 
 
       const deleteButton = document.createElement('img'); // Botón de borrar
@@ -418,14 +422,14 @@ const sendPost = (textPost) => {
       deleteButton.src = 'img/close.svg';
       deleteButton.addEventListener('click', () => {
         deletePost(doc.id);
-      })
+      });
 
       const editButton = document.createElement('img'); // Botón de editar
       editButton.src = 'img/edit.svg';
       editButton.classList.add('iconsDivPost');
       editButton.id = 'Edit';
 
-      editButton.id = 'Edit'
+      editButton.id = 'Edit';
       editButton.addEventListener('click', () => {
         document.getElementById(`divPost-${doc.id}`).innerHTML = '<textarea id=\'editTextArea\'></textarea>';
         document.getElementById('editTextArea').value = doc.data().POST;
@@ -434,10 +438,26 @@ const sendPost = (textPost) => {
         confirmButton.classList.add('confirmButton');
         confirmButton.addEventListener('click', () => {
           editPost(doc.id, document.getElementById('editTextArea').value);
-          console.log('Está saliendo de editar')
+          console.log('Está saliendo de editar');
         });
         document.getElementById(`divPost-${doc.id}`).appendChild(confirmButton);
       });
+
+      // Esto imprime la catogoría del post en el div
+      const categoryPost = document.createElement('span');
+      categoryPost.classList.add('categoryPost');
+      categoryPost.innerHTML = 'Categoría: Sin Categoría';
+      if (doc.data().categories.jobs) {
+        categoryPost.innerHTML = 'Categoría: Trabajos';
+      } else if (doc.data().categories.visa) {
+        categoryPost.innerHTML = 'Categoría: Visa';
+      } else if (doc.data().categories.rent) {
+        categoryPost.innerHTML = 'Categoría: Arriendos';
+      } else if (doc.data().categories.other) {
+        categoryPost.innerHTML = 'Categoría: Otros';
+      }
+
+      divPost.appendChild(categoryPost);
 
       divPost.appendChild(divLikes);
       divLikes.appendChild(numberLikes);
@@ -453,35 +473,13 @@ const sendPost = (textPost) => {
     });
 };
 
+// <-------Esta función imprime los posts cuando uno se loguea-------->
+const sendPost = (textPost) => {
+  console.log(`I am going to save ${textPost} to Firestore`);
+  const colletionOfPost = database.collection('post');
+  const postsOrdered = colletionOfPost.orderBy('postTime', 'desc');
 
-// <-----Logica Post------>
-
-const contentCategory = document.getElementById('contentCategory');
-
-const postCategory = () => {
-  window.location.hash = '/jobs';
-  console.log("Entro a la funcion de postCategory");
-
-  database.collection('post')
-  .where('categories.jobs', '==', true)
-  .get()
-  .then(() => {
-    console.log('trae esto');
-      // ...
-  });
-
-  const divCategory = document.createElement('div');
-  divCategory.innerHTML += `
-      <p class="message" id='messageCategory'>HOLA</p>
-      `;
-   contentCategory.appendChild(divCategory);
-  
-}
-
-
-const username = () =>{
-  const user = firebase.auth().currentUser;
-  console.log('Está entrando el postlike');
-
-  
-}
+  if (window.location.hash === '#/home') {
+    generatePosts(postsOrdered);
+  }
+};

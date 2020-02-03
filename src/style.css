@@ -388,8 +388,13 @@ h2 {
     border-radius: 0.5em;
 }
 
-.divIcons, .divLike {
+.divIcons {
     align-self: flex-end;
+}
+
+.divLike {
+    align-self: flex-end;
+    order: -2;
 }
 
 .card {
@@ -517,6 +522,14 @@ input[class="sad"]:focus + .svg {
 .numberLikes {
     font-size: 15px;
     color: #555555;
+}
+
+.categoryPost {
+    font-size: 12px;
+    color: #555555;
+    display: flex;
+    justify-content: flex-start;
+    order: -1;
 }
 
   @media screen and (max-width: 850px) {
