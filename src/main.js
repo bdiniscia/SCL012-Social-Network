@@ -457,15 +457,31 @@ const generatePosts = (newFilter) => {
         categoryPost.innerHTML = 'Categoría: Otros';
       }
 
+      const upperDiv = document.createElement('div');
+      upperDiv.classList.add('upperDiv');
+
+      const username = document.createElement('span');
+      username.classList.add('username');
+      username.innerHTML = doc.data().name;
+
+      const dateStamp = document.createElement('span');
+      dateStamp.classList.add('dateStamp');
+      dateStamp.innerHTML = doc.data().postTime;
+
       divPost.appendChild(categoryPost);
 
       divPost.appendChild(divLikes);
       divLikes.appendChild(numberLikes);
       divLikes.appendChild(likeButton);
 
-      divPost.appendChild(divIcons);
+      divPost.appendChild(dateStamp);
+      
+      divPost.appendChild(upperDiv);
+      upperDiv.appendChild(username);
+      upperDiv.appendChild(divIcons);
       divIcons.appendChild(deleteButton);
       divIcons.appendChild(editButton);
+
     });
   })
     .catch((error) => {

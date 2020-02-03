@@ -109,6 +109,8 @@ const deletePost = (id) => {
 const savePost = (textPost, rate) => {
   console.log(`I am going to save ${textPost} to Firestore`);
 
+  const user = firebase.auth().currentUser;
+
   let categorySelect;
 
   for (let i = 0; i < rate.length; i++) {
@@ -141,7 +143,9 @@ const savePost = (textPost, rate) => {
   database.collection('post').add({
     POST: textPost,
     like: [],
-    postTime: new Date(),
+    name: user.displayName,
+    userID: user.uid,
+    postTime: new Date().toUTCString(),
     categories: {
       jobs: check_jobs,
       visa: check_visa,

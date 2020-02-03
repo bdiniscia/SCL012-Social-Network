@@ -532,6 +532,25 @@ input[class="sad"]:focus + .svg {
     order: -1;
 }
 
+.upperDiv {
+    display: flex;
+    justify-content: space-between;
+}
+
+.username {
+    font-size: 16px;
+    font-weight: bold;
+    color: #5386e4;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.dateStamp {
+    font-size: 10px;
+    color: #555555;
+    display: flex;
+    justify-content: flex-start;
+}
+
   @media screen and (max-width: 850px) {
 
     .createMessage {
