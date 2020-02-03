@@ -1,6 +1,6 @@
 // Este es el punto de entrada de tu aplicacion
 import {
-  closeSession, signInUser, singUpNewUser, signUpGoogle, forgotPassword,
+  closeSession, signInUser, singUpNewUser, signUpGoogle, forgotPassword, deletePost, savePost, editPost, postLike,
 } from './lib/index.js';
 
 const database = firebase.firestore();
@@ -329,7 +329,7 @@ const createPost = () => {
   saveButton.id = 'saveButton';
 
   saveButton.addEventListener('click', () => {
-    const textToSave = input.value;
+    let textToSave = input.value;
     console.log(textToSave);
     savePost(textToSave);
     sendPost(textToSave);
@@ -370,6 +370,7 @@ const createPost = () => {
   `;
   divCatergorieAndSent.appendChild(saveButton);
 };
+
 
 // Guardar Post en Firebase
 const savePost = (textPost) => {
@@ -434,6 +435,7 @@ const savePost = (textPost) => {
 };
 
 
+
 // Traer Post
 const contentMessage = document.getElementById('contentMessage');
 
@@ -471,7 +473,7 @@ const sendPost = (textPost) => {
       const divIcons = document.createElement('div'); // Div de los íconos de Delete y Edit
       divIcons.classList.add('divIcons');
 
-      const divLikes = document.createElement('div'); // Div de los íconos de Delete y Edit
+      const divLikes = document.createElement('div'); // Div de los íconos de Me Gusta y Contador
       divLikes.classList.add('divIcons');
 
 
@@ -513,6 +515,7 @@ const sendPost = (textPost) => {
       console.log('Error getting documents: ', error);
     });
 };
+
 
 // Eliminar Post
 function deletePost(id) {
