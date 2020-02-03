@@ -106,7 +106,7 @@ const deletePost = (id) => {
 
 // Guardar Post en Firebase
 // Guardar Post en Firebase
-const savePost = (textPost, rate) => {
+const savePost = (textPost) => {
   console.log(`I am going to save ${textPost} to Firestore`);
   console.log('Prueba Radio Button');
   const user = firebase.auth().currentUser;
@@ -150,9 +150,8 @@ const savePost = (textPost, rate) => {
 
   database.collection('post').add({
     POST: textPost,
-    // category: categorySelect,
     like: [],
-    postTime: new Date(),
+    postTime: new Date().toUTCString(),
     photoURL: user.photoURL,
     name: user.displayName,
     categories: {
