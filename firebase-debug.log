@@ -28,3 +28,32 @@
 [warn] ⚠  hosting: Port 5000 is not available. Trying another port...
 [info] i  hosting: Serving hosting files from: src
 [info] ✔  hosting: Local server: http://localhost:5005
+[debug] [2020-02-05T15:12:30.213Z] ----------------------------------------------------------------------
+[debug] [2020-02-05T15:12:30.215Z] Command:       /usr/local/bin/node /usr/local/bin/firebase serve
+[debug] [2020-02-05T15:12:30.215Z] CLI Version:   7.12.1
+[debug] [2020-02-05T15:12:30.216Z] Platform:      darwin
+[debug] [2020-02-05T15:12:30.216Z] Node Version:  v10.16.3
+[debug] [2020-02-05T15:12:30.222Z] Time:          Wed Feb 05 2020 12:12:30 GMT-0300 (GMT-03:00)
+[debug] [2020-02-05T15:12:30.222Z] ----------------------------------------------------------------------
+[debug] [2020-02-05T15:12:30.222Z] 
+[debug] [2020-02-05T15:12:30.246Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-02-05T15:12:30.247Z] > authorizing via signed-in user
+[debug] [2020-02-05T15:12:30.247Z] [iam] checking project red-social-94f04 for permissions ["firebase.projects.get"]
+[debug] [2020-02-05T15:12:30.249Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2020-02-05T15:12:30.249Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2020-02-05T15:12:30.404Z] <<< HTTP RESPONSE 200
+[debug] [2020-02-05T15:12:30.442Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/red-social-94f04:testIamPermissions  
+
+[debug] [2020-02-05T15:12:31.529Z] <<< HTTP RESPONSE 200
+[debug] [2020-02-05T15:12:31.531Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/red-social-94f04  
+ 
+[debug] [2020-02-05T15:12:31.984Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Serving from '/Users/nerymarguarnizo/Desktop/SCL012-Social-Network'...
+[info] 
+[debug] [2020-02-05T15:12:31.989Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/red-social-94f04/webApps/-/config  
+ 
+[debug] [2020-02-05T15:12:33.521Z] <<< HTTP RESPONSE 200
+[info] i  hosting: Serving hosting files from: src
+[info] ✔  hosting: Local server: http://localhost:5000
