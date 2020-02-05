@@ -406,6 +406,16 @@ const generatePosts = (newFilter) => {
       divPost.innerHTML += `
     <p class="message" id='messagePosted'>${doc.data().POST}</p>
     `;
+    
+      const headerPost = document.createElement('div'); // El div de datos del usuario y hora
+      headerPost.classList.add('headerPost');
+      headerPost.id = `headerPost-${doc.id}`;
+      divPost.appendChild(headerPost);
+      headerPost.innerHTML +=`
+      <p class="message" id='messageHeader'>${doc.data().name}</p>
+      <p class="message" id='messageHeader'>${doc.data().postTime}</p>
+      <img class="message" id='messageHeader' src='${doc.data().photoURL}'></img>
+      `
 
       const likeButton = document.createElement('img'); // Botón de Me Gusta
       likeButton.src = 'img/heart.svg';
