@@ -44,9 +44,9 @@ const signInUser = (email, password) => {
 
 const singUpNewUser = (email, password, name) => {
   firebase.auth().createUserWithEmailAndPassword(email, password)
-    .then((result) => result.user.updateProfile({
-        displayName: name,
-      }))
+    .then(result => result.user.updateProfile({
+      displayName: name,
+    }))
     .then(() => {
       emailVerification();
     })
@@ -106,24 +106,16 @@ const deletePost = (id) => {
 
 // Guardar Post en Firebase
 // Guardar Post en Firebase
-const savePost = (textPost) => {
+const savePost = (textPost, rate) => {
   console.log(`I am going to save ${textPost} to Firestore`);
-  console.log('Prueba Radio Button');
+
   const user = firebase.auth().currentUser;
-  console.log(user);
-
-
-  // - De aca
-  const rate = document.getElementsByName('rating');
-
-  // - Imprime la cantidad de botones tipo radio
-  console.log(rate.length);
 
   let categorySelect;
 
   for (let i = 0; i < rate.length; i++) {
     if (rate[i].checked) {
-      console.log('Es el elemento ' + i);
+      console.log(`Es el elemento ${  i}`);
       categorySelect = i;
     }
   }
@@ -151,9 +143,9 @@ const savePost = (textPost) => {
   database.collection('post').add({
     POST: textPost,
     like: [],
-    postTime: new Date().toUTCString(),
-    photoURL: user.photoURL,
     name: user.displayName,
+    userID: user.uid,
+    postTime: new Date().toUTCString(),
     categories: {
       jobs: check_jobs,
       visa: check_visa,
@@ -176,7 +168,7 @@ const editPost = (id, textToSave) => {
   console.log('Está editando');
   return postRef.update({
     POST: textToSave,
-    postTime: new Date(),
+    postTime: new Date().toUTCString(),
   }).then(() => {
     console.log('Document successfully updated!');
   }).catch((error) => {

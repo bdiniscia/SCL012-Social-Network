@@ -497,7 +497,7 @@ input[class="sad"]:focus + .svg {
 }
 
 .message {
-    margin: 0.3em 0em 1em 0.2em;
+    margin: 1em 0em 1em 0.2em;
 }
 
 .confirmButton {
@@ -530,6 +530,25 @@ input[class="sad"]:focus + .svg {
     display: flex;
     justify-content: flex-start;
     order: -1;
+}
+
+.upperDiv {
+    display: flex;
+    justify-content: space-between;
+}
+
+.username {
+    font-size: 16px;
+    font-weight: bold;
+    color: #5386e4;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.dateStamp {
+    font-size: 10px;
+    color: #555555;
+    display: flex;
+    justify-content: flex-start;
 }
 
   @media screen and (max-width: 850px) {
